@@ -1,0 +1,15 @@
+.DS_Store
+
+secrets.py
+
+*.txt
+
+dist/
+
+lib/
+
+font-awesome/
+
+bootstrap/
+
+node_modules/
