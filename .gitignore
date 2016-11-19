@@ -13,3 +13,5 @@ font-awesome/
 bootstrap/
 
 node_modules/
+
+*.pyc
