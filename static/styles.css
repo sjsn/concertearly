@@ -85,9 +85,21 @@ button:focus {
 	}
 }
 
+h1 {
+	color: #808080;
+}
+
+.loading {
+	font-size: 50px;
+}
+
 .brand {
 	height: 5%;
 	width: 5%;
+}
+
+.navigation {
+	color: #62a2c4;
 }
 
 .content {
@@ -120,6 +132,10 @@ nav.navbar-top {
 	border-left: 1px solid #cccccc;
 	border-right: 1px solid #cccccc;
 	float: left;
+}
+
+.nav-form {
+	margin: 0px;
 }
 
 .footer {

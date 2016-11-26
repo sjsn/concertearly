@@ -4,12 +4,6 @@ import ReactDOM from 'react-dom';
 import LandingPage from './components/LandingPage';
 import HomePage from './components/HomePage';
 
-import Nav from './components/Nav';
-import Body from './components/Body';
-import Footer from './components/Footer';
-
-import $ from 'jquery';
-
 var App = React.createClass({
 	getInitialState: function() {
 		return {page: <LandingPage 
@@ -18,27 +12,24 @@ var App = React.createClass({
 						onSelectChange={this.handleSelectChange}
 						/>,
 				search: '',
-				method: 'concert'};
+				method: 'artist'};
 	},
-	onSearchChange: function(text) {
+	handleSearchChange: function(text) {
 		this.setState({search: text});
-		console.log(this.state.page);
-		console.log(this.state.text);
-		console.log(this.state.item);
 	},
-	onSelectChange: function(item) {
+	handleSelectChange: function(item) {
 		this.setState({method: item});
-		console.log(this.state.page);
-		console.log(this.state.text);
-		console.log(this.state.item);
 	},
 	handleSubmit: function(e) {
 		e.preventDefault();
-		console.log();
+		var body = document.querySelector('body');
+		body.style.backgroundColor = '#eef0f2';
 		this.setState({page: <HomePage 
 								onSubmit={this.handleSubmit} 
 								onSearchChange={this.handleSearchChange}
 								onSelectChange={this.handleSelectChange}
+								search={this.state.search}
+								method={this.state.method}
 								/>});
 	},
 	render: function() {

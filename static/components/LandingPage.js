@@ -5,6 +5,12 @@ var LandingPage = React.createClass({
 	getInitialState: function() {
 		return {background: "Pause"};
 	},
+	handleSearchChange: function(e) {
+		this.props.onSearchChange(e);
+	},
+	handleSelectChange: function(e) {
+		this.props.onSelectChange(e);
+	},
 	handleStopClick: function() {
 		var video = document.querySelector('.bgVid');
 		var body = document.querySelector('body');
@@ -31,8 +37,8 @@ var LandingPage = React.createClass({
 				</video>
 				<LandingContent 
 					onSubmit={this.props.onSubmit} 
-					onSearchChange={this.props.onSearchChange}
-					onSelectChange={this.props.onSelectChange}
+					onSearchChange={this.handleSearchChange}
+					onSelectChange={this.handleSelectChange}
 					/>
 				<div className="stop-btn">
 					<button onClick={this.handleStopClick}>{this.state.background} Background</button>
