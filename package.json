@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack && dev_appserver.py ."
+    "start": "webpack --progress && dev_appserver.py .",
+    "restart": "webpack --progress"
   },
   "author": "Samuel San Nicolas",
   "license": "ISC",
@@ -23,7 +24,10 @@
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.7",
     "babel-preset-react": "^6.16.0",
+    "core-js": "^2.4.1",
+    "jquery": "^3.1.1",
     "react": "^15.3.2",
+    "react-bootstrap": "^0.30.7",
     "react-dom": "^15.3.2",
     "webpack": "^1.13.3"
   }

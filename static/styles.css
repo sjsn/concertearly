@@ -2,4 +2,145 @@
 
 body {
 	font-family: 'Lato', helvetica, sans-serif;
+	background-color: black;
+}
+
+.landing {
+	width: 100%;
+	height: 100%;
+}
+
+.bgVid {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	min-width: 100%;
+	min-height: 100%;
+	width: auto;
+	height: auto;
+	z-index: -100;
+	-ms-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    background: url(background.png) no-repeat;
+}
+
+.landing-info {
+	background-color: #eef0f2;
+	padding: 20px;
+	color: #dd9425;
+	text-align: center;
+	margin: auto;
+	height: 100%;
+	margin-top: 10%;
+}
+
+.stop-btn {
+	position: absolute;
+	bottom: 5px;
+	right: 0px;
+	font-size: 8px;
+}
+
+.stop-btn button {
+	background: transparent;
+	border: none;
+	color: white;
+	font-style: italic;
+}
+
+.landing-dd:focus {
+	background-color: white;
+}
+
+.landing-form {
+	width: 60%;
+	margin: auto;
+	margin-top: 5%;
+	margin-bottom: 5%;
+}
+
+button:focus {
+	outline: none;
+}
+
+@media screen and (max-width: 760px) {
+	body {
+		background: url(background.png) center center fixed no-repeat;
+		height: 100%;
+		z-index: -100;
+	}
+
+	.bgVid {
+		display: none;
+	}
+
+	.stop-btn {
+		display: none;
+	}
+
+	.landing-form {
+		width: 80%;
+	}
+}
+
+.brand {
+	height: 5%;
+	width: 5%;
+}
+
+.content {
+	padding: 10px;
+}
+
+img.nav-logo {
+	height: 80%;
+	margin-left: 10px;
+	margin-top: 5px;
+	float: left;
+	background-color: #FFFFFF;
+	padding-left: 5px;
+	padding-right: 5px;
+	border-radius: 5px;
+	border: 1px solid grey;
+}
+
+nav.navbar-top {
+	background-color: #62a2c4;
+	border-bottom: 1px solid grey;
+	height: 60px;
+	width: 100%;
+}
+
+.search-bar {
+	margin-left: 50px;
+	margin-right: 50px;
+	margin-top: 1%;
+	border-left: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	float: left;
+}
+
+.footer {
+	text-align: center;
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	background-color: #808080;
+	color: white;
+	border-top: 1px solid grey;
+}
+
+.footer a {
+	color: white;
+}
+
+.footer a:hover {
+	color: white;
+	text-decoration: none;
+}
+
+.love {
+	color: red;
 }

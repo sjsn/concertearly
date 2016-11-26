@@ -17,5 +17,8 @@ module.exports = {
 		query: {
 			presets: ["react-hmre"]
 		}
+	},
+	devServer: {
+		inline: true
 	}
 };
