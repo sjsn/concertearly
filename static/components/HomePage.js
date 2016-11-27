@@ -2,6 +2,7 @@ import React from 'react';
 
 import Navigation from './Navigation';
 import Footer from './Footer';
+import HomeContent from './HomeContent';
 
 import $ from 'jquery';
 
@@ -16,9 +17,6 @@ var HomePage = React.createClass({
 	componentWillMount: function() {
 		this.handleNewSearch();
 	},
-	componentDidMount: function() {
-		document.querySelector('.loading').style.display = 'none';
-	},
 	handleNewSearch: function() {
 		$.ajax({
 			url: '/api/get_events',
@@ -28,7 +26,6 @@ var HomePage = React.createClass({
 				method: this.state.method
 			},
 			success: function(data) {
-				console.log(data);
 				this.setState({data: data})
 			}.bind(this),
 			error: function(xhr, status, err) {
@@ -66,7 +63,9 @@ var HomePage = React.createClass({
 					onSearchChange={this.handleSearchChange}
 					onSelectChange={this.handleSelectChange}
 					/>
-				<p className='loading'><i className='fa-spinner'></i></p>
+				<HomeContent 
+					items={this.state.data.events} 
+					term={this.state.search} />
 				<Footer />
 			</div>
 		);

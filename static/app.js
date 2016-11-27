@@ -24,6 +24,7 @@ var App = React.createClass({
 		e.preventDefault();
 		var body = document.querySelector('body');
 		body.style.backgroundColor = '#eef0f2';
+		body.style.background = 'none';
 		this.setState({page: <HomePage 
 								onSubmit={this.handleSubmit} 
 								onSearchChange={this.handleSearchChange}

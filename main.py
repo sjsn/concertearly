@@ -6,6 +6,7 @@ import spotipy
 app = Flask(__name__)
 
 j_key = jambase['key']
+j_key2 = jambase['key2']
 jambase_url = 'http://api.jambase.com/'
 s_key = spotify['id']
 spotify = spotipy.Spotify()
@@ -19,7 +20,6 @@ def main():
 @app.route('/api/get_events', methods=['POST'])
 def get_events():
 	method = request.form['method']
-	print method
 	if method == 'location':
 		zipcode = str(request.args.get('zip', ''))
 		radius = 50
@@ -70,7 +70,7 @@ def get_events():
 		artist_name = artist_name.replace(' ', '%20')
 		# Gets the artists Id given their name
 		if artist_name is not None:
-			search = jambase_url + 'artists?api_key=' + j_key + '&name=' + artist_name + "&o=json"
+			search = jambase_url + 'artists?api_key=' + j_key2 + '&name=' + artist_name + "&o=json"
 			try:
 				req = urllib2.Request(search)
 				res = urllib2.urlopen(search)
@@ -89,7 +89,7 @@ def get_events():
 			abort(400)
 		# Gets a list of all the artists playing at the event the given artist is playing at based off of their Id
 		if artistId is not None:
-			search = jambase_url + 'events?api_key=' + j_key + '&artistId=' + artistId + "&o=json"
+			search = jambase_url + 'events?api_key=' + j_key2 + '&artistId=' + artistId + "&o=json"
 			try:
 				req = urllib2.Request(search)
 				res = urllib2.urlopen(search)

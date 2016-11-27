@@ -12,7 +12,7 @@ var LandingContent = React.createClass({
 	render: function() {
 		return (
 			<div className="landing-info">	
-				<img src="static/logo.png" className="brand" />
+				<a href="/"><img src="static/logo.png" className="brand" /></a>
 				<div className="landing-content">
 					<Search 
 						onSubmit={this.props.onSubmit} 

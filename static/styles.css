@@ -85,8 +85,9 @@ button:focus {
 	}
 }
 
-h1 {
-	color: #808080;
+.navbar-default .navbar-brand,
+.navbar-default .navbar-brand:hover {
+	color: #eef0f2;
 }
 
 .loading {
@@ -99,7 +100,9 @@ h1 {
 }
 
 .navigation {
-	color: #62a2c4;
+	background-color: #62a2c4;
+	border: 0px;
+	border-radius: 0px;
 }
 
 .content {
@@ -135,6 +138,30 @@ nav.navbar-top {
 }
 
 .nav-form {
+	margin: 0px;
+}
+
+.result-title {
+	margin-bottom: 30px;
+}
+
+.results {
+	padding-left: 5%;
+	padding-right: 5%;
+}
+
+.result {
+	border-top: 1px solid #d7d6d6;
+	border-bottom: 1px solid #d7d6d6;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.title {
+	font-weight: bold;
+}
+
+.result > p {
 	margin: 0px;
 }
 
