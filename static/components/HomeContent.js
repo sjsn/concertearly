@@ -1,36 +1,69 @@
 import React from 'react';
 
+import Result from './Result';
+import DetailPage from './DetailPage';
+import Pagination from 'react-bootstrap/lib/Pagination';
+
 var HomeContent = React.createClass({
-	render: function() {
+	getInitialState: function() {
+		return {activePage: 1, searchResults: []};
+	},
+	componentDidMount: function() {
 		if (this.props.items) {
-			var searchResults = this.props.items.map(function(item) {
-				var artists = item.Artists.map(function(artist) {
-					return (
-						<span className='artist'>{artist.Name} |</span>
-					);
-				});
-				console.log(item);
+			this.setState({searchResults: this.changePage(1)});
+		}
+	},
+	handleSelect: function(eventKey) {
+		this.setState({activePage: eventKey, searchResults: this.changePage(eventKey)});
+	},
+	handleClick: function(artists) {
+		this.props.onClick(artists);
+	},
+	changePage: function(key) {
+		var items = this.props.items.slice((key - 1) * 5, key * 5)
+		var searchResults = items.map(function(item) {
+			var artists = item.Artists.map(function(artist) {
 				return (
-					<div className='result'>
-						<p className='venue'>
-							<span className='title'>Venue:</span> 
-							{item.Venue.Name}
-						</p>
-						<p className='loc'>
-							<span className='title'>Location:</span> 
-							{item.Venue.City}, {item.Venue.State}, {item.Venue.ZipCode}
-						</p>
-						<p className='artists'>
-							<span className='title'>Artists:</span> 
-							{artists}
-						</p>
-					</div>
+					<span className='artist'> {artist.Name} | </span>
 				);
 			});
+			var date = new Date(item.Date);
+			date = date.toDateString();
+			return (
+				<Result 
+					venueName={item.Venue.Name}
+					venueCity={item.Venue.City}
+					venueState={item.Venue.State}
+					venueZip={item.Venue.ZipCode}
+					artists={artists}
+					date={date}
+					onClick={this.handleClick}
+				/>
+			);
+		}.bind(this));
+		return searchResults;
+	},
+	render: function() {
+		if (this.props.items) {
 			return (
 				<div className='results'>
 					<h2>Showing results for '{this.props.term}'</h2>
-					{searchResults}
+					{this.state.searchResults}
+					<div className="page-holder">
+						<Pagination
+							prev
+							next
+							first
+							last
+							ellipsis
+							boundaryLinks
+							items={Math.ceil(this.props.items.length / 5)}
+							maxButtons={6}
+							activePage={this.state.activePage}
+							onSelect={this.handleSelect}
+							className={this.props.items.length <= 5 ? 'hidden' : ''}
+						/>
+					</div>
 				</div>
 			);
 		} else {

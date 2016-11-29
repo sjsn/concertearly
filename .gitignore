@@ -15,3 +15,5 @@ bootstrap/
 node_modules/
 
 *.pyc
+
+data.json

@@ -95,8 +95,8 @@ button:focus {
 }
 
 .brand {
-	height: 5%;
-	width: 5%;
+	height: 10%;
+	width: 10%;
 }
 
 .navigation {
@@ -141,6 +141,14 @@ nav.navbar-top {
 	margin: 0px;
 }
 
+.hidden {
+	display: none;
+}
+
+.shown {
+	display: block;
+}
+
 .result-title {
 	margin-bottom: 30px;
 }
@@ -155,6 +163,30 @@ nav.navbar-top {
 	border-bottom: 1px solid #d7d6d6;
 	padding-top: 15px;
 	padding-bottom: 15px;
+}
+
+.result:hover {
+	cursor: pointer;
+}
+
+.page-holder {
+	text-align: center;
+	width: 100%;
+}
+
+.pagination li.disabled a {
+	color: #62a2c4;
+	background-color: #eef0f2;
+}
+
+.pagination li a {
+	color: #62a2c4;
+	background-color: #eef0f2;
+}
+
+.pagination li.active a {
+	color: #eef0f2;
+	background-color: #62a2c4;
 }
 
 .title {

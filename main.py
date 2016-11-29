@@ -5,6 +5,7 @@ import spotipy
 
 app = Flask(__name__)
 
+# API information
 j_key = jambase['key']
 j_key2 = jambase['key2']
 jambase_url = 'http://api.jambase.com/'
@@ -20,17 +21,27 @@ def main():
 @app.route('/api/get_events', methods=['POST'])
 def get_events():
 	method = request.form['method']
+	term = request.form['search']
 	if method == 'location':
-		zipcode = str(request.args.get('zip', ''))
 		radius = 50
 		# Gets the information based off of the location
-		if zipcode is not None:
+		if term is not None:
 			# Sets the query for the API search
-			search = jambase_url + 'events?api_key=' + j_key + '&zipCode=' + zipcode + '&radius=' + radius + '&page=0' + + "&o=json"
-			req = json.load(urllib2.urlopen(search))
+			search = jambase_url + 'events?api_key=' + j_key + '&zipCode=' + term + '&radius=' + radius + '&page=0&o=json'
+			res = urllib2.urlopen(search)
 			try:
-				events = req['Events']
-				total = len(req['Events'])
+				events = json.load(res)['Events']
+				total = len(res['Events'])
+			except urllib2.HTTPError, e:
+				print "The server couldn't fulfill the request"
+				print "Error code: ", e.code
+				total = 0
+				events = "No events found. Please try again"
+			except urllib2.URLError, e:
+				print "We failed to reach a server"
+				print "Reason: ", e.reason
+				total = 0
+				events = "No events found. Please try again"
 			except:
 				total = 0
 				events = "No events found. Please try again"
@@ -39,13 +50,22 @@ def get_events():
 			abort(400)
 
 	elif method == 'venue':
-		venue_name = request.args.get('name', '')
+		term = term.replace(' ', '+')
 		# Gets the venue Id given the venue name
-		if venue_name is not None:
-			search = jambase_url + 'venues?api_key=' + j_key + '&name=' + venue_name + + "&o=json"
-			req = json.load(urllib2.urlopen(search))
+		if term is not None:
+			search = jambase_url + 'venues?api_key=' + j_key + '&name=' + term + '&page=0' + '&o=json'
+			res = urllib2.urlopen(search)
 			try:
-				venueId = str(req['Venues'][0]['Id'])
+				venueId = str(json.load(res)['Venues'][0]['Id'])
+				print str(venuId)
+			except urllib2.HTTPError, e:
+				print "The server couldn't fulfill the request"
+				print "Error code: ", e.code
+				venueId = None
+			except urllib2.URLError, e:
+				print "We failed to reach a server"
+				print "Reason: ", e.reason
+				venueId = None
 			except:
 				venueId = None
 		else:
@@ -54,10 +74,21 @@ def get_events():
 		# Generates the list of events happening at the given venue Id
 		if venueId is not None:
 			search = jambase_url + 'events?api_key=' + j_key + '&venueId=' + venueId
-			req = json.load(urllib2.urlopen(search))
+			print search
+			res = urllib2.urlopen(search)
 			try:
-				events = req['Events']
-				total = len(req['Events'])
+				events = json.load(res)['Events']
+				total = len(res['Events'])
+			except urllib2.HTTPError, e:
+				print "The server couldn't fulfill the request"
+				print "Error code: ", e.code
+				total = 0
+				events = "No events found. Please try again"
+			except urllib2.URLError, e:
+				print "We failed to reach a server"
+				print "Reason: ", e.reason
+				total = 0
+				events = "No events found. Please try again"
 			except:
 				total = 0
 				events = "No events found. Please try again"
@@ -66,18 +97,15 @@ def get_events():
 			events = "No events found. Please try again"
 
 	elif method == 'artist':
-		artist_name = request.form['search']
-		artist_name = artist_name.replace(' ', '%20')
+		term = term.replace(' ', '%20')
 		# Gets the artists Id given their name
-		if artist_name is not None:
-			search = jambase_url + 'artists?api_key=' + j_key2 + '&name=' + artist_name + "&o=json"
+		if term is not None:
+			search = jambase_url + 'artists?api_key=' + j_key2 + '&name=' + term + "&o=json"
 			try:
-				req = urllib2.Request(search)
 				res = urllib2.urlopen(search)
 			except urllib2.HTTPError, e:
 				print "The server couldn't fulfill the request"
 				print "Error code: ", e.code
-				print "Other: ", e
 				artistId = None
 			except urllib2.URLError, e:
 				print "We failed to reach a server"
@@ -91,7 +119,6 @@ def get_events():
 		if artistId is not None:
 			search = jambase_url + 'events?api_key=' + j_key2 + '&artistId=' + artistId + "&o=json"
 			try:
-				req = urllib2.Request(search)
 				res = urllib2.urlopen(search)
 			except urllib2.HTTPError, e:
 				print "The server couldn't fulfill the request"
@@ -115,3 +142,12 @@ def get_events():
 
 	# Generates the JSON for the information
 	return jsonify({'events': events, 'total': total})
+
+# GEnerates the spotify playlist based on selected concert
+@app.route('/api/gen_playlist', methods=['POST'])
+def gen_playlist():
+	artists = request.form['artists']
+	for artist in artists:
+		print artist
+	playlist = artists
+	return jsonify({'playlist': playlist})

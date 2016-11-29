@@ -3,15 +3,18 @@ import React from 'react';
 import Navigation from './Navigation';
 import Footer from './Footer';
 import HomeContent from './HomeContent';
+import DetailPage from './DetailPage';
 
 import $ from 'jquery';
 
 var HomePage = React.createClass({
 	getInitialState: function() {
 		return ({
+			curTerm: this.props.search,
 			search: this.props.search,
 			method: this.props.method,
-			data: {}
+			data: {},
+			page: ''
 		});
 	},
 	componentWillMount: function() {
@@ -26,7 +29,14 @@ var HomePage = React.createClass({
 				method: this.state.method
 			},
 			success: function(data) {
-				this.setState({data: data})
+				this.setState({data: data,
+					page: <HomeContent 
+							items={data.events} 
+							length={data.total}
+							term={this.state.curTerm} 
+							onClick={this.handleClick}
+							/>
+				});
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.log(err);
@@ -51,9 +61,16 @@ var HomePage = React.createClass({
 		var body = document.querySelector('body');
 		body.style.backgroundColor = '#eef0f2';
 		this.setState({search: this.state.search,
-						method:this.state.method
+						method:this.state.method,
+						curTerm: this.state.search
 						});
 		this.handleNewSearch();
+	},
+	handleClick: function(artists) {
+		var newPage = <DetailPage 
+						data={artists}
+						/>;
+		this.setState({page: newPage});
 	},
 	render: function() {
 		return (
@@ -63,9 +80,7 @@ var HomePage = React.createClass({
 					onSearchChange={this.handleSearchChange}
 					onSelectChange={this.handleSelectChange}
 					/>
-				<HomeContent 
-					items={this.state.data.events} 
-					term={this.state.search} />
+				{this.state.page}
 				<Footer />
 			</div>
 		);
