@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from secrets import spotify, jambase
 import urllib2, json
 import spotipy
+import spotipy.util as util
 
 app = Flask(__name__)
 
@@ -11,6 +12,7 @@ j_key2 = jambase['key2']
 jambase_url = 'http://api.jambase.com/'
 s_key = spotify['id']
 spotify = spotipy.Spotify()
+util.prompt_for_user_token(username, scope)
 
 # Renders main page
 @app.route('/', methods=['GET', 'POST'])
@@ -143,11 +145,23 @@ def get_events():
 	# Generates the JSON for the information
 	return jsonify({'events': events, 'total': total})
 
-# GEnerates the spotify playlist based on selected concert
+# Generates the spotify playlist based on the selected concert
 @app.route('/api/gen_playlist', methods=['POST'])
 def gen_playlist():
-	artists = request.form['artists']
+	artists = request.form.getlist('artists[]')
+	numTracks = int(30 / len(artists))
+	details = {}
 	for artist in artists:
-		print artist
-	playlist = artists
-	return jsonify({'playlist': playlist})
+		artist_id = spotify.search(q='artists:' + artist, type='artist')
+		details[artist]['id'] = artist_id['artists']['items'][0]['id']
+		details[artist]['image'] = artist_id['artists']['items'][0]['images'][0]['url']
+		tracks = spotify.artist_top_tracks(details[artist]['id'])
+		details[artist]['tracks'] = [{}]
+		for track in tracks[:numTracks]:
+			song = {}
+			song['name'] = track[0]['album']['name']
+			song['url'] = track[0]['album']['href']
+			song['id'] = track[0]['album']['id']
+			details[artist]['tracks'].append(song)
+	# print jsonify({'details': details})
+	return jsonify(details)

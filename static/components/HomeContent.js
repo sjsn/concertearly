@@ -16,15 +16,17 @@ var HomeContent = React.createClass({
 	handleSelect: function(eventKey) {
 		this.setState({activePage: eventKey, searchResults: this.changePage(eventKey)});
 	},
-	handleClick: function(artists) {
-		this.props.onClick(artists);
+	handleClick: function(artists, venue, date) {
+		this.props.onClick(artists, venue, date);
 	},
 	changePage: function(key) {
-		var items = this.props.items.slice((key - 1) * 5, key * 5)
-		var searchResults = items.map(function(item) {
+		var items = this.props.items.slice((key - 1) * 5, key * 5);
+		var searchResults = items.map(function(item, index) {
+			var names = [];
 			var artists = item.Artists.map(function(artist) {
+				names.push(artist.Name);
 				return (
-					<span className='artist'> {artist.Name} | </span>
+					<span className='artist-res' key={artist.Id}> {artist.Name} | </span>
 				);
 			});
 			var date = new Date(item.Date);
@@ -36,7 +38,9 @@ var HomeContent = React.createClass({
 					venueState={item.Venue.State}
 					venueZip={item.Venue.ZipCode}
 					artists={artists}
+					names={names}
 					date={date}
+					key={index}
 					onClick={this.handleClick}
 				/>
 			);

@@ -2,7 +2,7 @@ import React from 'react';
 
 var Result = React.createClass({
 	handleClick: function() {
-		this.props.onClick(this.props.artists);
+		this.props.onClick(this.props.names, this.props.venueName, this.props.date);
 	},
 	render: function() {
 		return (

@@ -197,6 +197,11 @@ nav.navbar-top {
 	margin: 0px;
 }
 
+.details {
+	padding-top: 5px;
+	padding-left: 50px;
+}
+
 .footer {
 	text-align: center;
 	position: absolute;
