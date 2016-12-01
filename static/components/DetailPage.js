@@ -14,26 +14,25 @@ var DetailPage = React.createClass({
 				artists: this.props.artists
 			},
 			success: function(data) {
-				console.log(data);
 				this.setState({data: data});
 				this.handleDetails();
 			}.bind(this),
 			error: function(xhr, status, err) {
-				console.log(xhr);
+				console.log(err);
 			}
 		});
 	},
 	handleDetails: function() {
-		var details = this.data.map(function(artist) {
-			var tracks = this.artist.tracks.map(function(track) {
+		var details = this.state.data.map(function(artist) {
+			var tracks = artist.tracks.map(function(track) {
 				return (
-					<li key={track.id}><a href={track.url}>{track.name}</a></li>
+					<li key={track.id}><a href={track.sample}>{track.name}</a></li>
 				);
 			});
 			return (
 				<div>
 					<ul className="artist" key={artist.id}>
-						<li><h3 className='name'>{artist.name}</h3></li>
+						<h3 className='name'>{artist.name}</h3>
 						{tracks}
 					</ul>
 				</div>
