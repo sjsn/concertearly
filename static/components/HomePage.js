@@ -66,11 +66,12 @@ var HomePage = React.createClass({
 						});
 		this.handleNewSearch();
 	},
-	handleClick: function(artists, venue, date) {
+	handleClick: function(artists, venue, date, title) {
 		var newPage = <DetailPage 
 						artists={artists}
 						venue={venue}
 						date={date}
+						title={title}
 						/>;
 		this.setState({page: newPage});
 	},

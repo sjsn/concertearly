@@ -16,27 +16,26 @@ var HomeContent = React.createClass({
 	handleSelect: function(eventKey) {
 		this.setState({activePage: eventKey, searchResults: this.changePage(eventKey)});
 	},
-	handleClick: function(artists, venue, date) {
-		this.props.onClick(artists, venue, date);
+	handleClick: function(artists, venue, date, title) {
+		this.props.onClick(artists, venue, date, title);
 	},
 	changePage: function(key) {
 		var items = this.props.items.slice((key - 1) * 5, key * 5);
 		var searchResults = items.map(function(item, index) {
 			var names = [];
-			var artists = item.Artists.map(function(artist) {
-				names.push(artist.Name);
+			var artists = item.performers.map(function(artist) {
+				names.push(artist.name);
 				return (
-					<span className='artist-res' key={artist.Id}> {artist.Name} | </span>
+					<span className='artist-res' key={artist.id}> {artist.name} | </span>
 				);
 			});
-			var date = new Date(item.Date);
+			var date = new Date(item.datetime_utc);
 			date = date.toDateString();
 			return (
 				<Result 
-					venueName={item.Venue.Name}
-					venueCity={item.Venue.City}
-					venueState={item.Venue.State}
-					venueZip={item.Venue.ZipCode}
+					venueName={item.venue.name}
+					venueAddress={item.venue.extended_address}
+					eventTitle={item.short_title}
 					artists={artists}
 					names={names}
 					date={date}

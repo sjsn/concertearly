@@ -65,6 +65,14 @@ button:focus {
 	outline: none;
 }
 
+.concert-artist {
+	background-color: #d7d6d6;
+	width: 40%;
+	display: inline-block;
+	margin-right: 2%;
+	margin-bottom: 50px;
+}
+
 @media screen and (max-width: 760px) {
 	body {
 		background: url(background.png) center center fixed no-repeat;
@@ -81,8 +89,64 @@ button:focus {
 	}
 
 	.landing-form {
-		width: 80%;
+		width: 90%;
 	}
+
+	.concert-artist {
+		width: 80%;
+		margin-right: 5%;
+	}
+}
+
+@media screen and (max-width: 968px) {
+	.concert-artist {
+		width: 40%;
+		margin-right: 10%;
+	}
+}
+
+.detail-top {
+	margin-bottom: 20px;
+}
+
+.detail-top h2 {
+	display: inline-block;
+	margin-right: 50px;
+}
+
+.detail-top button {
+	float: right;
+	margin-right: 100px;
+	transform: translateY(100%);
+}
+
+.heading, .subheading {
+	margin-bottom: 0px;
+}
+
+.sub-heading {
+	marg
+}
+
+.add-toggle {
+	float: right;
+	margin-right: 10px;
+	margin-top: 10px;
+	font-size: 40px;
+	border: none;
+	background-color: #d7d6d6;
+}
+
+.added-ico {
+	color: #62a2c4;
+}
+
+.add-ico {
+	color: green;
+}
+
+.name {
+	display: inline-block;
 }
 
 .navbar-default .navbar-brand,
@@ -202,9 +266,15 @@ nav.navbar-top {
 	padding-left: 50px;
 }
 
+img.artist-img {
+	max-height: 200px;
+	margin-bottom: 20px;
+	display: block;
+}
+
 .footer {
 	text-align: center;
-	position: fixed;
+	position: static;
 	bottom: 0px;
 	width: 100%;
 	background-color: #808080;

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from secrets import spotify, jambase
+from secrets import spotify, jambase, seatgeek
 import urllib2, json
 
 app = Flask(__name__)
@@ -7,9 +7,13 @@ app = Flask(__name__)
 # API information
 j_key = jambase['key']
 j_key2 = jambase['key2']
+j_key3 = jambase['key3']
 jambase_url = 'http://api.jambase.com/'
 s_key = spotify['id']
 spotify_url = 'https://api.spotify.com/v1/'
+sg_id = seatgeek['id']
+sg_secret = seatgeek['secret']
+s_geek_url = 'https://api.seatgeek.com/2'
 
 # Renders main page
 @app.route('/', methods=['GET', 'POST'])
@@ -22,101 +26,137 @@ def get_events():
 	method = request.form['method']
 	term = request.form['search']
 	if method == 'location':
-		radius = 50
-		# Gets the information based off of the location
-		if term is not None:
-			# Sets the query for the API search
-			search = jambase_url + 'events?api_key=' + j_key + '&zipCode=' + term + '&radius=' + radius + '&page=0&o=json'
-			res = urllib2.urlopen(search)
-			try:
-				events = json.load(res)['Events']
-				total = len(res['Events'])
-			except urllib2.HTTPError, e:
-				print "The server couldn't fulfill the request"
-				print "Error code: ", e.code
-				total = 0
-				events = "No events found. Please try again"
-			except urllib2.URLError, e:
-				print "We failed to reach a server"
-				print "Reason: ", e.reason
-				total = 0
-				events = "No events found. Please try again"
-			except:
-				total = 0
-				events = "No events found. Please try again"
-		else:
-			# Invalid parameters
-			abort(400)
+		return None
+	# 	radius = 50
+	# 	# Gets the information based off of the location
+	# 	if term is not None:
+	# 		# Sets the query for the API search
+	# 		search = jambase_url + 'events?api_key=' + j_key + '&zipCode=' + term + '&radius=' + radius + '&page=0&o=json'
+	# 		res = urllib2.urlopen(search)
+	# 		try:
+	# 			events = json.load(res)['Events']
+	# 			total = len(res['Events'])
+	# 		except urllib2.HTTPError, e:
+	# 			print "The server couldn't fulfill the request"
+	# 			print "Error code: ", e.code
+	# 			total = 0
+	# 			events = "No events found. Please try again"
+	# 		except urllib2.URLError, e:
+	# 			print "We failed to reach a server"
+	# 			print "Reason: ", e.reason
+	# 			total = 0
+	# 			events = "No events found. Please try again"
+	# 		except:
+	# 			total = 0
+	# 			events = "No events found. Please try again"
+	# 	else:
+	# 		# Invalid parameters
+	# 		abort(400)
 
-	elif method == 'venue':
-		term = term.replace(' ', '+')
-		# Gets the venue Id given the venue name
-		if term is not None:
-			search = jambase_url + 'venues?api_key=' + j_key + '&name=' + term + '&page=0' + '&o=json'
-			res = urllib2.urlopen(search)
-			try:
-				venueId = str(json.load(res)['Venues'][0]['Id'])
-				print str(venuId)
-			except urllib2.HTTPError, e:
-				print "The server couldn't fulfill the request"
-				print "Error code: ", e.code
-				venueId = None
-			except urllib2.URLError, e:
-				print "We failed to reach a server"
-				print "Reason: ", e.reason
-				venueId = None
-			except:
-				venueId = None
-		else:
-			# Invalid parameters
-			abort(400)
-		# Generates the list of events happening at the given venue Id
-		if venueId is not None:
-			search = jambase_url + 'events?api_key=' + j_key + '&venueId=' + venueId
-			print search
-			res = urllib2.urlopen(search)
-			try:
-				events = json.load(res)['Events']
-				total = len(res['Events'])
-			except urllib2.HTTPError, e:
-				print "The server couldn't fulfill the request"
-				print "Error code: ", e.code
-				total = 0
-				events = "No events found. Please try again"
-			except urllib2.URLError, e:
-				print "We failed to reach a server"
-				print "Reason: ", e.reason
-				total = 0
-				events = "No events found. Please try again"
-			except:
-				total = 0
-				events = "No events found. Please try again"
-		else:
-			total = 0
-			events = "No events found. Please try again"
+	# elif method == 'venue':
+	# 	term = term.replace(' ', '+')
+	# 	# Gets the venue Id given the venue name
+	# 	if term is not None:
+	# 		search = jambase_url + 'venues?api_key=' + j_key + '&name=' + term + '&page=0' + '&o=json'
+	# 		res = urllib2.urlopen(search)
+	# 		try:
+	# 			venueId = str(json.load(res)['Venues'][0]['Id'])
+	# 			print str(venuId)
+	# 		except urllib2.HTTPError, e:
+	# 			print "The server couldn't fulfill the request"
+	# 			print "Error code: ", e.code
+	# 			venueId = None
+	# 		except urllib2.URLError, e:
+	# 			print "We failed to reach a server"
+	# 			print "Reason: ", e.reason
+	# 			venueId = None
+	# 		except:
+	# 			venueId = None
+	# 	else:
+	# 		# Invalid parameters
+	# 		abort(400)
+	# 	# Generates the list of events happening at the given venue Id
+	# 	if venueId is not None:
+	# 		search = jambase_url + 'events?api_key=' + j_key + '&venueId=' + venueId
+	# 		print search
+	# 		res = urllib2.urlopen(search)
+	# 		try:
+	# 			events = json.load(res)['Events']
+	# 			total = len(res['Events'])
+	# 		except urllib2.HTTPError, e:
+	# 			print "The server couldn't fulfill the request"
+	# 			print "Error code: ", e.code
+	# 			total = 0
+	# 			events = "No events found. Please try again"
+	# 		except urllib2.URLError, e:
+	# 			print "We failed to reach a server"
+	# 			print "Reason: ", e.reason
+	# 			total = 0
+	# 			events = "No events found. Please try again"
+	# 		except:
+	# 			total = 0
+	# 			events = "No events found. Please try again"
+	# 	else:
+	# 		total = 0
+	# 		events = "No events found. Please try again"
 
 	elif method == 'artist':
-		term = term.replace(' ', '%20')
+		term = term.replace(' ', '+')
 		# Gets the artists Id given their name
+		# if term is not None:
+		# 	search = jambase_url + 'artists?api_key=' + j_key2 + '&name=' + term + "&o=json"
+		# 	print search
+		# 	try:
+		# 		res = urllib2.urlopen(search)
+		# 	except urllib2.HTTPError, e:
+		# 		print "The server couldn't fulfill the request"
+		# 		print "Error code: ", e.code
+		# 		artistId = None
+		# 	except urllib2.URLError, e:
+		# 		print "We failed to reach a server"
+		# 		print "Reason: ", e.reason
+		# 		artistId = None
+		# 	else:
+		# 		artistId = str(json.load(res)['Artists'][0]['Id'])
+		# else:
+		# 	abort(400)
+		# # Gets a list of all the artists playing at the event the given artist is playing at based off of their Id
+		# if artistId is not None:
+		# 	search = jambase_url + 'events?api_key=' + j_key2 + '&artistId=' + artistId + "&o=json"
+		# 	try:
+		# 		res = urllib2.urlopen(search)
+		# 	except urllib2.HTTPError, e:
+		# 		print "The server couldn't fulfill the request"
+		# 		print "Error code: ", e.code
+		# 		total = 0
+		# 		events = "No events found. Please try again."
+		# 	except urllib2.URLError, e:
+		# 		print "We failed to reach a server"
+		# 		print "Reason: ", e.reason
+		# 		total = 0
+		# 		events = "No events found. Please try again."
+		# 	else:
+		# 		events = json.load(res)['Events']
+		# 		total = len(events)
+		# else:
+		# 	total = 0
+		# 	events = "No events found. Please try again."
 		if term is not None:
-			search = jambase_url + 'artists?api_key=' + j_key + '&name=' + term + "&o=json"
-			try:
-				res = urllib2.urlopen(search)
-			except urllib2.HTTPError, e:
-				print "The server couldn't fulfill the request"
-				print "Error code: ", e.code
-				artistId = None
-			except urllib2.URLError, e:
-				print "We failed to reach a server"
-				print "Reason: ", e.reason
-				artistId = None
-			else:
-				artistId = str(json.load(res)['Artists'][0]['Id'])
+			search = s_geek_url + '/performers?q=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret
+		try:
+			res = urllib2.urlopen(search)
+		except urllib2.HTTPError, e:
+			print "The server couldn't fulfill the request"
+			print "Error code: ", e.code
+			artistId = None
+		except urllib2.URLError, e:
+			print "We failed to reach a server"
+			print "Reason: ", e.reason
+			artistId = None
 		else:
-			abort(400)
-		# Gets a list of all the artists playing at the event the given artist is playing at based off of their Id
+			artistId = str(json.load(res)['performers'][0]['id'])
 		if artistId is not None:
-			search = jambase_url + 'events?api_key=' + j_key + '&artistId=' + artistId + "&o=json"
+			search = s_geek_url + '/events?performers.id=' + artistId + '&client_id=' + sg_id + '&client_secret=' + sg_secret
 			try:
 				res = urllib2.urlopen(search)
 			except urllib2.HTTPError, e:
@@ -130,11 +170,8 @@ def get_events():
 				total = 0
 				events = "No events found. Please try again."
 			else:
-				events = json.load(res)['Events']
+				events = json.load(res)['events']
 				total = len(events)
-		else:
-			total = 0
-			events = "No events found. Please try again."
 	else:
 		events = "Invalid parameters."
 		total = 0
@@ -162,26 +199,27 @@ def gen_playlist():
 			print "Reason: ", e.reason
 		else:
 			item['name'] = artist
-			item['id'] = res['artists']['items'][0]['id']
-			item['image'] = res['artists']['items'][0]['images'][0]['url']
-			track_url = '%sartists/%s/top-tracks?country=US'%(spotify_url, item['id'])
-			try:
-				res = json.load(urllib2.urlopen(track_url))['tracks']
-			except urllib2.HTTPError, e:
-				print "The server couldn't fulfill the request"
-				print "Error code: ", e.code
-			except urllib2.URLError, e:
-				print "We failed to reach a server"
-				print "Reason: ", e.reason
-			else:
-				item['tracks'] = [{}]
-				for track in res[:numTracks]:
-					song = {}
-					song['name'] = track['name']
-					song['sample'] = track['preview_url']
-					song['uri'] = track['uri']
-					song['id'] = track['id']
-					item['tracks'].append(song)
-				details.append(item)
+			if len(res['artists']['items']) > 0:
+				item['id'] = res['artists']['items'][0]['id']
+				item['image'] = res['artists']['items'][0]['images'][0]['url']
+				track_url = '%sartists/%s/top-tracks?country=US'%(spotify_url, item['id'])
+				try:
+					res = json.load(urllib2.urlopen(track_url))['tracks']
+				except urllib2.HTTPError, e:
+					print "The server couldn't fulfill the request"
+					print "Error code: ", e.code
+				except urllib2.URLError, e:
+					print "We failed to reach a server"
+					print "Reason: ", e.reason
+				else:
+					item['tracks'] = [{}]
+					for track in res[:numTracks]:
+						song = {}
+						song['name'] = track['name']
+						song['sample'] = track['preview_url']
+						song['uri'] = track['uri']
+						song['id'] = track['id']
+						item['tracks'].append(song)
+					details.append(item)
 	# print jsonify({'details': details})
 	return jsonify(details)
