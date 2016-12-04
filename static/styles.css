@@ -33,7 +33,21 @@ body {
 	text-align: center;
 	margin: auto;
 	height: 100%;
-	margin-top: 10%;
+	margin-top: 7%;
+}
+
+.type-select {
+	margin: auto;
+	display: inline-block;
+	margin-left: 10px;
+	margin-right: 5px;
+}
+
+.search-prompt {
+	font-size: 20px;
+	display: inline-block;
+	vertical-align: 10px;
+	margin-bottom: 20px;
 }
 
 .stop-btn {
@@ -67,10 +81,42 @@ button:focus {
 
 .concert-artist {
 	background-color: #d7d6d6;
-	width: 40%;
+	width: 30%;
 	display: inline-block;
 	margin-right: 2%;
 	margin-bottom: 50px;
+}
+
+.concert-title {
+	font-size: 20px;
+}
+
+.date, .artists, .address {
+	font-size: 15px;
+}
+.event-name {
+	font-weight: bold;
+}
+
+.venue-name {
+	font-style: italic;
+}
+
+.result-head {
+	margin-bottom: 20px;
+}
+
+.blank {
+	font-size: 20px;
+	text-align: center;
+	margin-top: 5%;
+}
+
+.land-select {
+		display: inline-block;
+		margin: auto;
+		margin-right: 5px;
+		margin-left: 12px;
 }
 
 @media screen and (max-width: 760px) {
@@ -96,12 +142,53 @@ button:focus {
 		width: 80%;
 		margin-right: 5%;
 	}
+
+	.landing-info {
+		margin-top: 30%;
+	}
+
+	.navbar-nav {
+		margin: auto;
+		width: 60%;
+		display: inline-block;
+		padding-left: 15px;
+	}
+
+	.nav {
+		padding-left: none;
+	}
+
+	.navbar-form {
+		border-color: transparent;
+		margin-bottom: 0px;
+		margin-top: 0px;
+		border-bottom: none;
+		border-top: none;
+		box-shadow: none;
+		-webkit-box-shadow: none;
+	}
+
+	.navbar-header {
+		display: inline-block;
+	}
+
+	.type-select {
+		margin-left: none;
+		float: left;
+		display: inline-block;
+		margin: auto;
+		margin-right: 5px;
+	}
 }
 
 @media screen and (max-width: 968px) {
 	.concert-artist {
 		width: 40%;
 		margin-right: 10%;
+	}
+
+	.landing-info {
+		margin-top: 20%;
 	}
 }
 
@@ -120,18 +207,12 @@ button:focus {
 	transform: translateY(100%);
 }
 
-.heading, .subheading {
+.heading, .sub-heading {
 	margin-bottom: 0px;
-}
-
-.sub-heading {
-	marg
 }
 
 .add-toggle {
 	float: right;
-	margin-right: 10px;
-	margin-top: 10px;
 	font-size: 40px;
 	border: none;
 	background-color: #d7d6d6;
@@ -156,6 +237,15 @@ button:focus {
 
 .loading {
 	font-size: 50px;
+	text-align: center;
+	animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform:rotate(360deg);
+	}
 }
 
 .brand {
@@ -171,6 +261,10 @@ button:focus {
 
 .content {
 	padding: 10px;
+}
+
+#content, {
+	height: 100%;
 }
 
 img.nav-logo {
@@ -217,9 +311,14 @@ nav.navbar-top {
 	margin-bottom: 30px;
 }
 
-.results {
+.results, .details {
 	padding-left: 5%;
 	padding-right: 5%;
+	padding-bottom: 1%;
+}
+
+.main-holder {
+	height: 100vh;
 }
 
 .result {
@@ -261,20 +360,26 @@ nav.navbar-top {
 	margin: 0px;
 }
 
-.details {
-	padding-top: 5px;
-	padding-left: 50px;
+.play-btn:hover {
+	cursor: pointer;
+}
+
+.track-title {
+	font-size: 15px;
+	font-weight: bold;
+	margin-left: 10px;
+	margin-bottom: 0px;
 }
 
 img.artist-img {
-	max-height: 200px;
-	margin-bottom: 20px;
+	max-width: 80%;
+	margin-bottom: 10px;
 	display: block;
 }
 
 .footer {
 	text-align: center;
-	position: static;
+	position: relative;
 	bottom: 0px;
 	width: 100%;
 	background-color: #808080;

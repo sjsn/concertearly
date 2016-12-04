@@ -14,7 +14,12 @@ var HomePage = React.createClass({
 			search: this.props.search,
 			method: this.props.method,
 			data: {},
-			page: ''
+			page: (
+					<div className='results'>
+						<h2 className='result-title'>Showing results for '{this.props.search}'</h2>
+						<p className='loading'><i className='fa fa-spinner'></i></p>
+					</div>
+				) 
 		});
 	},
 	componentWillMount: function() {
@@ -77,7 +82,7 @@ var HomePage = React.createClass({
 	},
 	render: function() {
 		return (
-			<div>
+			<div className="main-holder">
 				<Navigation 
 					onSubmit={this.handleSubmit} 
 					onSearchChange={this.handleSearchChange}

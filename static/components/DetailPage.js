@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 var DetailPage = React.createClass({
 	getInitialState: function() {
-		return {data: []}
+		return {data: [], loading: true}
 	},
 	componentDidMount: function() {
 		$.ajax({
@@ -19,6 +19,7 @@ var DetailPage = React.createClass({
 				this.handleDetails();
 			}.bind(this),
 			error: function(xhr, status, err) {
+
 				console.log(err);
 			}
 		});
@@ -36,6 +37,7 @@ var DetailPage = React.createClass({
 					/>
 			);
 		}.bind(this));
+		this.setState({loading: false});
 		this.setState({details: details})
 	},
 	handleCreateClick: function() {
@@ -55,17 +57,31 @@ var DetailPage = React.createClass({
 		console.log(this.state.artists);
 	},
 	render: function() {
-		return (
-			<div className="details">
-				<h1 className="heading">{this.props.title}</h1>
-				<h2 className="sub-heading">{this.props.date} – {this.props.venue}</h2>
-				<div className="detail-top">
-					<h2>Featuring</h2>
-					<button onClick={this.handleCreateClick}>Create Playlist</button>
+		if (!this.state.loading) {
+			return (
+				<div className="details">
+					<h1 className="heading">{this.props.title}</h1>
+					<h2 className="sub-heading">{this.props.date} – {this.props.venue}</h2>
+					<div className="detail-top">
+						<h2>Featuring</h2>
+						<button onClick={this.handleCreateClick}>Create Playlist</button>
+					</div>
+					{this.state.details}
 				</div>
-				{this.state.details}
-			</div>
-		);
+			);
+		} else if (this.state.error) {
+			return (
+				<div className="error">
+					<p>There was an error retrieving the information. Please try again later.</p>
+				</div>
+			);
+		} else {
+			return (
+				<div>
+					<p className='loading'><i className='fa fa-spinner'></i></p>
+				</div>
+			);
+		}
 	}
 });
 

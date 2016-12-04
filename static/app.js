@@ -25,13 +25,16 @@ var App = React.createClass({
 		var body = document.querySelector('body');
 		body.style.backgroundColor = '#eef0f2';
 		body.style.background = 'none';
-		this.setState({page: <HomePage 
-								onSubmit={this.handleSubmit} 
-								onSearchChange={this.handleSearchChange}
-								onSelectChange={this.handleSelectChange}
-								search={this.state.search}
-								method={this.state.method}
-								/>});
+		// Temporary routing solution. Switch to React-Router later
+		if (this.state.search) {
+			this.setState({page: <HomePage 
+									onSubmit={this.handleSubmit} 
+									onSearchChange={this.handleSearchChange}
+									onSelectChange={this.handleSelectChange}
+									search={this.state.search}
+									method={this.state.method}
+									/>});
+		}
 	},
 	render: function() {
 		return (

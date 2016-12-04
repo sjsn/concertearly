@@ -26,16 +26,14 @@ var Navigation = React.createClass({
 					</Navbar.Brand>
 				</Navbar.Header>
 				<Nav>
-					<Navbar.Collapse>
-						<Navbar.Form pullLeft>
-							<Search 
-								onSubmit={this.props.onSubmit} 
-								onSearchChange={this.handleSearchChange}
-								onSelectChange={this.handleSelectChange}
-								className='nav-form'
-								/>
-						</Navbar.Form>
-					</Navbar.Collapse>
+					<Navbar.Form pullLeft>
+						<Search 
+							onSubmit={this.props.onSubmit} 
+							onSearchChange={this.handleSearchChange}
+							onSelectChange={this.handleSelectChange}
+							className='nav-form'
+							/>
+					</Navbar.Form>
 				</Nav>
 			</Navbar>
 		);

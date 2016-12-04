@@ -21,21 +21,25 @@ var Search = React.createClass({
 		} else if (e.target.value == 'venue') {
 			this.setState({keyword: 'Search by venue name'});
 		} else if (e.target.value == 'location') {
-			this.setState({keyword: 'Search by zipcode'})
+			this.setState({keyword: 'Search by zipcode'});
+		} else if (e.target.value == 'concert') {
+			this.setState({keyword: 'Search by concert name'});
 		}
 	},
 	render: function() {
 		return (
 			<form className={this.props.context} onSubmit={this.props.onSubmit}>
 				<FormGroup>
-					<InputGroup>
+					<p className={this.props.context == 'landing-form' ? 'search-prompt' : 'hidden'}>Search by: </p>
+					<InputGroup className={this.props.context == 'landing-form' ? 'land-select type-select' : 'type-select'}>
 						<FormControl 
 							componentClass="select" 
 							name="method"
 							onChange={this.handleSelectChange}>
 							<option value="artist">Artist</option>
-							<option value="venue">Venue Name</option>
+							<option value="venue">Venue</option>
 							<option value="location">Location</option>
+							<option value="concert">Concert</option>
 						</FormControl>
 					</InputGroup>
 					<InputGroup>

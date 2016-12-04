@@ -1,13 +1,10 @@
 from flask import Flask, render_template, request, jsonify
-from secrets import spotify, jambase, seatgeek
+from secrets import spotify, seatgeek
 import urllib2, json
 
 app = Flask(__name__)
 
 # API information
-j_key = jambase['key']
-j_key2 = jambase['key2']
-j_key3 = jambase['key3']
 jambase_url = 'http://api.jambase.com/'
 s_key = spotify['id']
 spotify_url = 'https://api.spotify.com/v1/'
@@ -103,44 +100,6 @@ def get_events():
 	elif method == 'artist':
 		term = term.replace(' ', '+')
 		# Gets the artists Id given their name
-		# if term is not None:
-		# 	search = jambase_url + 'artists?api_key=' + j_key2 + '&name=' + term + "&o=json"
-		# 	print search
-		# 	try:
-		# 		res = urllib2.urlopen(search)
-		# 	except urllib2.HTTPError, e:
-		# 		print "The server couldn't fulfill the request"
-		# 		print "Error code: ", e.code
-		# 		artistId = None
-		# 	except urllib2.URLError, e:
-		# 		print "We failed to reach a server"
-		# 		print "Reason: ", e.reason
-		# 		artistId = None
-		# 	else:
-		# 		artistId = str(json.load(res)['Artists'][0]['Id'])
-		# else:
-		# 	abort(400)
-		# # Gets a list of all the artists playing at the event the given artist is playing at based off of their Id
-		# if artistId is not None:
-		# 	search = jambase_url + 'events?api_key=' + j_key2 + '&artistId=' + artistId + "&o=json"
-		# 	try:
-		# 		res = urllib2.urlopen(search)
-		# 	except urllib2.HTTPError, e:
-		# 		print "The server couldn't fulfill the request"
-		# 		print "Error code: ", e.code
-		# 		total = 0
-		# 		events = "No events found. Please try again."
-		# 	except urllib2.URLError, e:
-		# 		print "We failed to reach a server"
-		# 		print "Reason: ", e.reason
-		# 		total = 0
-		# 		events = "No events found. Please try again."
-		# 	else:
-		# 		events = json.load(res)['Events']
-		# 		total = len(events)
-		# else:
-		# 	total = 0
-		# 	events = "No events found. Please try again."
 		if term is not None:
 			search = s_geek_url + '/performers?q=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret
 		try:
@@ -219,7 +178,13 @@ def gen_playlist():
 						song['sample'] = track['preview_url']
 						song['uri'] = track['uri']
 						song['id'] = track['id']
+						song['album'] = track['album']['name']
 						item['tracks'].append(song)
 					details.append(item)
 	# print jsonify({'details': details})
 	return jsonify(details)
+
+@app.route('/api/create_playlist', methods=['POST'])
+def create_playlist():
+	artists = request.form['artists']
+	return None
