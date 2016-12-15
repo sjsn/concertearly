@@ -21,7 +21,7 @@ var HomeContent = React.createClass({
 	},
 	changePage: function(key) {
 		if (this.props.length) {
-			var items = this.props.items.slice((key - 1) * 4, key * 4);
+			var items = this.props.items.slice((key - 1) * 6, key * 6);
 			this.setState({total: items.length});
 			var searchResults = items.map(function(item, index) {
 				var names = [];
@@ -70,7 +70,7 @@ var HomeContent = React.createClass({
 						last
 						ellipsis
 						boundaryLinks
-						items={Math.ceil(this.props.items.length / 4)}
+						items={Math.ceil(this.props.items.length / 6)}
 						maxButtons={6}
 						activePage={this.state.activePage}
 						onSelect={this.handleSelect}

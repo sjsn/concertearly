@@ -340,6 +340,7 @@ nav.navbar-top {
 	height: 80vh;
 	position: relative;
 	overflow-y: hidden;
+	overflow-x: hidden;
 }
 
 .result {

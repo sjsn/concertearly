@@ -25,29 +25,7 @@ var Artist = React.createClass({
 		this.setState({added: !this.state.added});
 	},
 	handlePlay: function(track) {
-		if (!this.state.playing) {
-			this.setState({playing: track.id});
-			this.setState({on: true});
-			var audio = new Audio(track.preview_url + ".mp3");
-			this.setState({audio: audio});
-			console.log(this.state.audio);
-			this.state.audio.play();
-		} else if (this.state.playing == track.id) {
-			if (this.state.on) {
-				this.state.audio.pause();
-				this.setState({on: false});
-			} else {
-				this.state.audio.play();
-				this.setState({on: true});
-			}
-		} else {
-			this.state.audio.pause();
-			var audio = new Audio(track.preview_url);
-			this.setState({audio: audio});
-			this.state.audio.play();
-			this.setState({playing: track.id});
-			this.setState({on: true});
-		}
+		console.log(track);
 	},
 	render: function() {
 		return (

@@ -64,7 +64,7 @@ var DetailPage = React.createClass({
 				if (data.success >= 0) {
 					console.log('success!');
 					this.setState({created: 
-						<p className="play-created"><a href={"http://open.spotify.com/user/spotify/playlist/" + data.id}>Playlist Created <i className="fa fa-check-circle created"></i></a></p>
+						<p className="play-created"><a href={"http://open.spotify.com/user/spotify/playlist/" + data.id} target="_blank">Playlist Created <i className="fa fa-check-circle created"></i></a></p>
 					});
 				} else {
 					console.log('fail...');
@@ -75,6 +75,9 @@ var DetailPage = React.createClass({
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.log(err);
+				this.setState({created: 
+					<p className="play-created failed">Failed to make playlist. Please make sure you're <a href="/spotify/auth">signed in</a>.</p>
+				});
 			}
 		});
 	},
