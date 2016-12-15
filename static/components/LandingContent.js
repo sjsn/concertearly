@@ -12,8 +12,12 @@ var LandingContent = React.createClass({
 			url: '/get_user',
 			type: 'GET',
 			success: function(data) {
-				console.log(data)
-				this.setState({spot: <p>Signed in as {data.display_name}.</p>});
+				if (data.display_name) {
+					this.setState({spot: <div>
+											<p>Signed in as {data.display_name}.</p>
+											<p><a href="/signout">Log out</a></p>
+										</div>});
+				}
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.log(err);

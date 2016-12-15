@@ -37,12 +37,40 @@ var DetailPage = React.createClass({
 					/>
 			);
 		}.bind(this));
+		var tracks = [];
+		for (var i = 0; i < this.state.artists.length; i++) {
+			for (var j = 0; j < this.state.artists[i].tracks.length; j++) {
+				tracks.push(this.state.artists[i].tracks[j].uri);
+			}
+		}
+		this.setState({tracks: tracks});
 		this.setState({loading: false});
-		this.setState({details: details})
+		this.setState({details: details});
 	},
 	handleCreateClick: function() {
 		// Create playlist with list of artists from this.state.artists
-		console.log(this.state.artists);
+		console.log(this.state.tracks);
+		$.ajax({
+			url: '/api/create_playlist',
+			type: 'POST',
+			data: {
+				tracks: this.state.tracks,
+				playlist_name: this.props.title
+			},
+			success: function(data) {
+				console.log(data);
+				if (data.success >= 0) {
+					console.log('success!');
+					
+				} else {
+					console.log('fail...');
+					
+				}
+			}.bind(this)
+			error: function(xhr, status, err) {
+				console.log(err);
+			}
+		});
 	},
 	handleArtistToggle: function(artist) {
 		// Toggle {artist} state from this.state.artists
@@ -53,8 +81,15 @@ var DetailPage = React.createClass({
 		} else {
 			artists.push(artist);
 		}
-		this.setState({artists: artists});
-		console.log(this.state.artists);
+		this.setState({artists: artists})
+		var tracks = [];
+		for (var i = 0; i < artists.length; i++) {
+			for (var j = 0; j < artists[i].tracks.length; j++) {
+				tracks.push(artists[i].tracks[j].uri);
+			}
+		}
+		this.setState({tracks: tracks});
+		console.log(this.state.tracks);
 	},
 	render: function() {
 		if (!this.state.loading) {
