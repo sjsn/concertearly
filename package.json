@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --progress && dev_appserver.py .",
-    "restart": "webpack --progress"
+    "restart": "webpack --progress",
+    "deploy": "gcloud app deploy app.yaml --verbosity=info"
   },
   "author": "Samuel San Nicolas",
   "license": "ISC",
@@ -29,6 +30,7 @@
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.3.2",
+    "react-router": "^3.0.0",
     "webpack": "^1.13.3"
   }
 }

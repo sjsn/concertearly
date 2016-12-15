@@ -1,16 +1,22 @@
-from flask import Flask, render_template, request, jsonify
-from secrets import spotify, seatgeek
-import urllib2, json
+from flask import Flask, render_template, request, jsonify, session, redirect
+from secrets import spotify, seatgeek, secret
+import urllib2, json, urllib
 
 app = Flask(__name__)
+# For session storage (in place of a database)
+app.secret_key = secret['secret']
 
 # API information
-jambase_url = 'http://api.jambase.com/'
 s_key = spotify['id']
+s_secret = spotify['secret']
 spotify_url = 'https://api.spotify.com/v1/'
+spot_auth = 'https://accounts.spotify.com/authorize'
+
 sg_id = seatgeek['id']
 sg_secret = seatgeek['secret']
 s_geek_url = 'https://api.seatgeek.com/2'
+
+redirect_1 = 'http://localhost:8080/spotify/auth/handle'#'https:///concertearly.appspot.com/spotify/auth/handle'
 
 # Renders main page
 @app.route('/', methods=['GET', 'POST'])
@@ -116,6 +122,7 @@ def get_events():
 			artistId = str(json.load(res)['performers'][0]['id'])
 		if artistId is not None:
 			search = s_geek_url + '/events?performers.id=' + artistId + '&client_id=' + sg_id + '&client_secret=' + sg_secret
+			print search
 			try:
 				res = urllib2.urlopen(search)
 			except urllib2.HTTPError, e:
@@ -134,9 +141,33 @@ def get_events():
 	else:
 		events = "Invalid parameters."
 		total = 0
+	print jsonify(events)
 
 	# Generates the JSON for the information
 	return jsonify({'events': events, 'total': total})
+
+@app.route('/get_user', methods=['GET'])
+def get_user():
+	if 'access' in session:
+		url = '%sme'%(spotify_url)
+		print url
+		print session['access']
+		try:
+			req = urllib2.Request(url)
+			req.add_header('Authorization', 'Bearer ' + session['access'])
+			res = urllib2.urlopen(req)
+		except urllib2.HTTPError, e:
+			print "The server couldn't fulfill the request"
+			print "Error code: ", e.code
+		except urllib2.URLError, e:
+			print "We failed to reach a server"
+			print "Reason: ", e.reason
+		else:
+			res = json.load(res)
+			print str(res)
+			return jsonify(res)
+	else:
+		return jsonify({'user': ''})
 
 # Generates the spotify playlist based on the selected concert
 @app.route('/api/gen_playlist', methods=['POST'])
@@ -181,10 +212,46 @@ def gen_playlist():
 						song['album'] = track['album']['name']
 						item['tracks'].append(song)
 					details.append(item)
-	# print jsonify({'details': details})
 	return jsonify(details)
 
+# Creates playlist
 @app.route('/api/create_playlist', methods=['POST'])
 def create_playlist():
 	artists = request.form['artists']
 	return None
+
+# Logs user into their spotify account
+@app.route('/spotify/auth', methods=['GET'])
+def spotify_auth():
+	scopes = "playlist-modify+playlist-modify-public+streaming"
+	cred = urllib.urlencode({'client_id': s_key, 'response_type': 'code', 'redirect_uri': redirect_1, 'scopes': scopes})
+	url = "%s?%s"%(spot_auth, cred)
+	return redirect(url)
+
+# Logs user into their spotify account
+@app.route('/spotify/auth/handle', methods=['GET'])
+def spotify_auth_handler():
+	code = request.args.get('code', '')
+	state = request.args.get('state', '')
+	error = request.args.get('error', '')
+	if code:
+		params = {'grant_type': 'authorization_code', 'code': code, 'redirect_uri': redirect_1, 'client_id': s_key, 'client_secret': s_secret}
+		params = urllib.urlencode(params)
+		url = 'https://accounts.spotify.com/api/token'
+		try:
+			res = urllib2.urlopen(url, params)
+		except urllib2.HTTPError, e:
+			print "The server couldn't fulfill the request"
+			print "Error code: ", e.code
+		except urllib2.URLError, e:
+			print "We failed to reach a server"
+			print "Reason: ", e.reason
+		else:
+			res = json.load(res)
+			session['access'] = res['access_token']
+			session['refresh'] = res['refresh_token']
+	elif error:
+		print str(error)
+	else:
+		print "Invalid request"
+	return redirect('/')

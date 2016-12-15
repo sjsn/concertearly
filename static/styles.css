@@ -33,7 +33,7 @@ body {
 	text-align: center;
 	margin: auto;
 	height: 100%;
-	margin-top: 7%;
+	margin-top: 10%;
 }
 
 .type-select {
@@ -85,6 +85,8 @@ button:focus {
 	display: inline-block;
 	margin-right: 2%;
 	margin-bottom: 50px;
+	height: 450px;
+	overflow-y: hidden;
 }
 
 .concert-title {
@@ -113,10 +115,15 @@ button:focus {
 }
 
 .land-select {
-		display: inline-block;
-		margin: auto;
-		margin-right: 5px;
-		margin-left: 12px;
+	display: inline-block;
+	margin: auto;
+	margin-right: 5px;
+	margin-left: 12px;
+}
+
+.brand {
+	height: 10%;
+	width: 5%;
 }
 
 @media screen and (max-width: 760px) {
@@ -179,6 +186,10 @@ button:focus {
 		margin: auto;
 		margin-right: 5px;
 	}
+
+	.brand {
+		width: 10%;
+	}
 }
 
 @media screen and (max-width: 968px) {
@@ -190,6 +201,18 @@ button:focus {
 	.landing-info {
 		margin-top: 20%;
 	}
+
+	.brand {
+		width: 10%;
+	}
+}
+
+.table-bordered>thead>tr>th {
+	border: 1px solid lightgray;
+}
+
+table {
+	background-color: white;
 }
 
 .detail-top {
@@ -246,11 +269,6 @@ button:focus {
 		-webkit-transform: rotate(360deg);
 		transform:rotate(360deg);
 	}
-}
-
-.brand {
-	height: 10%;
-	width: 10%;
 }
 
 .navigation {
@@ -360,6 +378,10 @@ nav.navbar-top {
 	margin: 0px;
 }
 
+.play-btn {
+	color: grey;
+}
+
 .play-btn:hover {
 	cursor: pointer;
 }
@@ -371,10 +393,15 @@ nav.navbar-top {
 	margin-bottom: 0px;
 }
 
+.artist {
+	text-align: center;
+}
+
 img.artist-img {
 	max-width: 80%;
+	max-height: 180px;
 	margin-bottom: 10px;
-	display: block;
+	display: inline-block;
 }
 
 .footer {
@@ -398,4 +425,9 @@ img.artist-img {
 
 .love {
 	color: red;
+}
+
+.table-responsive {
+	height: 150px;
+	overflow-y: scroll;
 }

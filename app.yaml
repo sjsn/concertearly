@@ -14,11 +14,16 @@ handlers:
   static_files: static/favicon.ico
   upload: static/favicon\.ico
 
-- url: /bootstrap
-  static_dir: bootstrap
-
-- url: /font-awesome
-  static_dir: font-awesome
-
 - url: /.*
   script: main.app
+
+skip_files:
+- ^(.*/)?babel-core/*
+- ^(.*/)?babel-loader/*
+- ^(.*/)?babel-preset-es2015/*
+- ^(.*/)?babel-preset-react/*
+- ^(.*/)?babel-preset-react-hmre/*
+- ^(.*/)?babel-runtime/*
+- ^(.*/)?css-loader/*
+- ^(.*/)?style-loader/*
+- ^(.*/)?webpack-dev-server/*

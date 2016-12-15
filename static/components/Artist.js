@@ -24,7 +24,7 @@ var Artist = React.createClass({
 				<tr key={track.id}>
 					<td>{track.name}</td>
 					<td>{track.album}</td>
-					<td><i className="fa fa-play play-btn" onClick={this.handlePlay(track)}></i></td>
+					<td><i className="fa fa-play play-btn" onClick={this.handlePlay}></i></td>
 				</tr>
 			);
 		}.bind(this));
@@ -40,9 +40,9 @@ var Artist = React.createClass({
 					<img src={this.props.artist.image} alt={this.props.artist.name} className="artist-img" />
 					<div className="content">
 						<p className="track-title">Popular Tracks: </p>
-						<Table striped bordered condensed hover responsive>
+						<Table bordered condensed hover responsive>
 							<thead>
-								<tr><th>Track</th><th>Album</th><th></th></tr>
+								<tr><th>Track</th><th colSpan="2">Album</th></tr>
 							</thead>
 							<tbody>
 								{tracks}

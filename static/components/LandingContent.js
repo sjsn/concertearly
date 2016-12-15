@@ -1,8 +1,25 @@
 import React from 'react';
 
 import Search from './Search'
+import $ from 'jquery';
 
 var LandingContent = React.createClass({
+	getInitialState: function() {
+		return {'spot': <p><a href="/spotify/auth">Sign in with Spotify.</a></p>};
+	},
+	componentDidMount: function() {
+		$.ajax({
+			url: '/get_user',
+			type: 'GET',
+			success: function(data) {
+				console.log(data)
+				this.setState({spot: <p>Signed in as {data.display_name}.</p>});
+			}.bind(this),
+			error: function(xhr, status, err) {
+				console.log(err);
+			}
+		});
+	},
 	handleSearchChange: function(e) {
 		this.props.onSearchChange(e);
 	},
@@ -20,8 +37,8 @@ var LandingContent = React.createClass({
 						onSelectChange={this.handleSelectChange}
 						context='landing-form'
 						/>
-					<p><a href="#">Sign in with Spotify.</a></p>
 				</div>
+				{this.state.spot}
 			</div>
 		);
 	}
