@@ -1,10 +1,19 @@
 import React from 'react';
 
+import Track from './Track';
 import Table from 'react-bootstrap/lib/Table';
 
 var Artist = React.createClass({
 	getInitialState: function() {
 		return {added: true, icon: <i className="fa fa-check-circle-o added-ico"></i>};
+	},
+	componentWillMount: function() {
+		var tracks = this.props.artist.tracks.map(function(track) {
+			return (
+				<Track track={track} onClick={this.handlePlay} />
+			);
+		}.bind(this));
+		this.setState({tracks: tracks});
 	},
 	handleToggle: function() {
 		this.props.onClick(this.props.artist);
@@ -16,18 +25,31 @@ var Artist = React.createClass({
 		this.setState({added: !this.state.added});
 	},
 	handlePlay: function(track) {
-		console.log(track);
+		if (!this.state.playing) {
+			this.setState({playing: track.id});
+			this.setState({on: true});
+			var audio = new Audio(track.preview_url + ".mp3");
+			this.setState({audio: audio});
+			console.log(this.state.audio);
+			this.state.audio.play();
+		} else if (this.state.playing == track.id) {
+			if (this.state.on) {
+				this.state.audio.pause();
+				this.setState({on: false});
+			} else {
+				this.state.audio.play();
+				this.setState({on: true});
+			}
+		} else {
+			this.state.audio.pause();
+			var audio = new Audio(track.preview_url);
+			this.setState({audio: audio});
+			this.state.audio.play();
+			this.setState({playing: track.id});
+			this.setState({on: true});
+		}
 	},
 	render: function() {
-		var tracks = this.props.artist.tracks.map(function(track) {
-			return (
-				<tr key={track.id}>
-					<td>{track.name}</td>
-					<td>{track.album}</td>
-					<td><i className="fa fa-play play-btn" onClick={this.handlePlay}></i></td>
-				</tr>
-			);
-		}.bind(this));
 		return (
 			<div key={this.props.artist.id} className="concert-artist">
 				<div className="artist">
@@ -45,7 +67,7 @@ var Artist = React.createClass({
 								<tr><th>Track</th><th colSpan="2">Album</th></tr>
 							</thead>
 							<tbody>
-								{tracks}
+								{this.state.tracks}
 							</tbody>
 						</Table>
 					</div>

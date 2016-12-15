@@ -21,7 +21,8 @@ var HomeContent = React.createClass({
 	},
 	changePage: function(key) {
 		if (this.props.length) {
-			var items = this.props.items.slice((key - 1) * 5, key * 5);
+			var items = this.props.items.slice((key - 1) * 4, key * 4);
+			this.setState({total: items.length});
 			var searchResults = items.map(function(item, index) {
 				var names = [];
 				var artists = item.performers.map(function(artist, index, arr) {
@@ -61,6 +62,7 @@ var HomeContent = React.createClass({
 				<h2 className="result-head">Showing results for '{this.props.term}'</h2>
 				{this.state.searchResults}
 				<div className="page-holder">
+					<p className="result-count">Showing {this.state.total} out of {this.props.items.length} results</p>
 					<Pagination
 						prev
 						next
@@ -68,11 +70,11 @@ var HomeContent = React.createClass({
 						last
 						ellipsis
 						boundaryLinks
-						items={Math.ceil(this.props.items.length / 5)}
+						items={Math.ceil(this.props.items.length / 4)}
 						maxButtons={6}
 						activePage={this.state.activePage}
 						onSelect={this.handleSelect}
-						className={this.props.items.length <= 5 ? 'hidden' : ''}
+						className={this.props.items == null || this.props.items.length <= 5  ? 'hidden page-nums' : 'page-nums'}
 					/>
 				</div>
 			</div>

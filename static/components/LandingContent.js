@@ -14,8 +14,8 @@ var LandingContent = React.createClass({
 			success: function(data) {
 				if (data.display_name) {
 					this.setState({spot: <div>
-											<p>Signed in as {data.display_name}.</p>
-											<p><a href="/signout">Log out</a></p>
+											<p>Signed in as <a href={data.external_urls.spotify}>{data.display_name}</a>.</p>
+											<p><a href="/signout">Sign out</a></p>
 										</div>});
 				}
 			}.bind(this),

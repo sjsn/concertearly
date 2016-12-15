@@ -20,8 +20,10 @@ var Search = React.createClass({
 			this.setState({keyword: 'Search by artist name'});
 		} else if (e.target.value == 'venue') {
 			this.setState({keyword: 'Search by venue name'});
-		} else if (e.target.value == 'location') {
+		} else if (e.target.value == 'zip') {
 			this.setState({keyword: 'Search by zipcode'});
+		} else if (e.target.value == 'city') {
+			this.setState({keyword: 'Search by city'});
 		} else if (e.target.value == 'concert') {
 			this.setState({keyword: 'Search by concert name'});
 		}
@@ -38,7 +40,8 @@ var Search = React.createClass({
 							onChange={this.handleSelectChange}>
 							<option value="artist">Artist</option>
 							<option value="venue">Venue</option>
-							<option value="location">Location</option>
+							<option value="zip">Zipcode</option>
+							<option value="city">City</option>
 							<option value="concert">Concert</option>
 						</FormControl>
 					</InputGroup>

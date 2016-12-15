@@ -26,6 +26,10 @@ var HomePage = React.createClass({
 		this.handleNewSearch();
 	},
 	handleNewSearch: function() {
+		this.setState({page: <div className='results'>
+								<h2 className='result-title'>Showing results for '{this.props.search}'</h2>
+								<p className='loading'><i className='fa fa-spinner'></i></p>
+							</div>});
 		$.ajax({
 			url: '/api/get_events',
 			type: 'POST',
@@ -48,16 +52,16 @@ var HomePage = React.createClass({
 			}
 		});
 	},
-	handleSearchChange: function(e) {
-		this.setState({search: e});
+	handleSearchChange: function(search) {
+		this.setState({search: search});
 	},
-	handleSelectChange: function(e) {
-		this.setState({method: e});
-		if (e == 'artist') {
+	handleSelectChange: function(method) {
+		this.setState({method: method});
+		if (method == 'artist') {
 			this.setState({keyword: 'Search by artist name'});
-		} else if (e == 'venue') {
+		} else if (method == 'venue') {
 			this.setState({keyword: 'Search by venue name'});
-		} else if (e == 'location') {
+		} else if (method == 'location') {
 			this.setState({keyword: 'Search by zipcode'})
 		}
 	},

@@ -16,7 +16,7 @@ sg_id = seatgeek['id']
 sg_secret = seatgeek['secret']
 s_geek_url = 'https://api.seatgeek.com/2'
 
-redirect_1 = 'http://localhost:8080/spotify/auth/handle'#'https:///concertearly.appspot.com/spotify/auth/handle'
+redirect_1 = 'http://localhost:8080/spotify/auth/handle'#'https://concertearly.appspot.com/spotify/auth/handle'
 
 # Renders main page
 @app.route('/', methods=['GET', 'POST'])
@@ -28,81 +28,177 @@ def main():
 def get_events():
 	method = request.form['method']
 	term = request.form['search']
-	if method == 'location':
-		return None
-	# 	radius = 50
-	# 	# Gets the information based off of the location
-	# 	if term is not None:
-	# 		# Sets the query for the API search
-	# 		search = jambase_url + 'events?api_key=' + j_key + '&zipCode=' + term + '&radius=' + radius + '&page=0&o=json'
-	# 		res = urllib2.urlopen(search)
-	# 		try:
-	# 			events = json.load(res)['Events']
-	# 			total = len(res['Events'])
-	# 		except urllib2.HTTPError, e:
-	# 			print "The server couldn't fulfill the request"
-	# 			print "Error code: ", e.code
-	# 			total = 0
-	# 			events = "No events found. Please try again"
-	# 		except urllib2.URLError, e:
-	# 			print "We failed to reach a server"
-	# 			print "Reason: ", e.reason
-	# 			total = 0
-	# 			events = "No events found. Please try again"
-	# 		except:
-	# 			total = 0
-	# 			events = "No events found. Please try again"
-	# 	else:
-	# 		# Invalid parameters
-	# 		abort(400)
-
-	# elif method == 'venue':
-	# 	term = term.replace(' ', '+')
-	# 	# Gets the venue Id given the venue name
-	# 	if term is not None:
-	# 		search = jambase_url + 'venues?api_key=' + j_key + '&name=' + term + '&page=0' + '&o=json'
-	# 		res = urllib2.urlopen(search)
-	# 		try:
-	# 			venueId = str(json.load(res)['Venues'][0]['Id'])
-	# 			print str(venuId)
-	# 		except urllib2.HTTPError, e:
-	# 			print "The server couldn't fulfill the request"
-	# 			print "Error code: ", e.code
-	# 			venueId = None
-	# 		except urllib2.URLError, e:
-	# 			print "We failed to reach a server"
-	# 			print "Reason: ", e.reason
-	# 			venueId = None
-	# 		except:
-	# 			venueId = None
-	# 	else:
-	# 		# Invalid parameters
-	# 		abort(400)
-	# 	# Generates the list of events happening at the given venue Id
-	# 	if venueId is not None:
-	# 		search = jambase_url + 'events?api_key=' + j_key + '&venueId=' + venueId
-	# 		print search
-	# 		res = urllib2.urlopen(search)
-	# 		try:
-	# 			events = json.load(res)['Events']
-	# 			total = len(res['Events'])
-	# 		except urllib2.HTTPError, e:
-	# 			print "The server couldn't fulfill the request"
-	# 			print "Error code: ", e.code
-	# 			total = 0
-	# 			events = "No events found. Please try again"
-	# 		except urllib2.URLError, e:
-	# 			print "We failed to reach a server"
-	# 			print "Reason: ", e.reason
-	# 			total = 0
-	# 			events = "No events found. Please try again"
-	# 		except:
-	# 			total = 0
-	# 			events = "No events found. Please try again"
-	# 	else:
-	# 		total = 0
-	# 		events = "No events found. Please try again"
-
+	if method == 'zip':
+		# Gets the events Id given its zipcode
+		if term is not None:
+			search = s_geek_url + '/venues?postal_code=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret
+		try:
+			res = urllib2.urlopen(search)
+		except urllib2.HTTPError, e:
+			print "The server couldn't fulfill the request"
+			print "Error code: ", e.code
+			venues = None
+		except urllib2.URLError, e:
+			print "We failed to reach a server"
+			print "Reason: ", e.reason
+			venues = None
+		else:
+			venues = json.load(res)['venues']
+			print venues
+			if len(venues) > 0:
+				venueIds = [venue['id'] for venue in venues]
+			else:
+				venueIds = None
+		if venueIds is not None:
+			urls = [(s_geek_url + '/events?venue.id=' + str(venueId) + '&client_id=' + sg_id + '&client_secret=' + sg_secret + '&taxonomies.name=concert') for venueId in venueIds]
+			final_events = []
+			final_total = 0
+			for url in urls:
+				try:
+					res = urllib2.urlopen(url)
+				except urllib2.HTTPError, e:
+					print "The server couldn't fulfill the request"
+					print "Error code: ", e.code
+					total = 0
+					events = "No events found. Please try again."
+				except urllib2.URLError, e:
+					print "We failed to reach a server"
+					print "Reason: ", e.reason
+					total = 0
+					events = "No events found. Please try again."
+				else:
+					events = json.load(res)['events']
+					total = len(events)					
+					for event in events:
+						final_events.append(event)
+						final_total += total
+			events = final_events
+			total = final_total
+		else:
+			events = []
+			total = 0
+	elif method == 'city':
+		term = term.replace(' ', '+')
+		# Gets the events Id given its zipcode
+		if term is not None:
+			search = s_geek_url + '/venues?city=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret
+		try:
+			res = urllib2.urlopen(search)
+		except urllib2.HTTPError, e:
+			print "The server couldn't fulfill the request"
+			print "Error code: ", e.code
+			venues = None
+		except urllib2.URLError, e:
+			print "We failed to reach a server"
+			print "Reason: ", e.reason
+			venues = None
+		else:
+			venues = json.load(res)['venues']
+			if len(venues) > 0:
+				venueIds = [venue['id'] for venue in venues]
+			else:
+				venueIds = None
+		if venueIds is not None:
+			urls = [(s_geek_url + '/events?venue.id=' + str(venueId) + '&client_id=' + sg_id + '&client_secret=' + sg_secret + '&taxonomies.name=concert') for venueId in venueIds]
+			final_events = []
+			final_total = 0
+			for url in urls:
+				try:
+					res = urllib2.urlopen(url)
+				except urllib2.HTTPError, e:
+					print "The server couldn't fulfill the request"
+					print "Error code: ", e.code
+					total = 0
+					events = "No events found. Please try again."
+				except urllib2.URLError, e:
+					print "We failed to reach a server"
+					print "Reason: ", e.reason
+					total = 0
+					events = "No events found. Please try again."
+				else:
+					events = json.load(res)['events']
+					total = len(events)					
+					for event in events:
+						final_events.append(event)
+						final_total += total
+			events = final_events
+			total = final_total
+		else:
+			events = []
+			total = 0
+	elif method == 'venue':
+		term = term.replace(' ', '+')
+		# Gets the events Id given its name
+		if term is not None:
+			search = s_geek_url + '/venues?q=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret
+		try:
+			res = urllib2.urlopen(search)
+		except urllib2.HTTPError, e:
+			print "The server couldn't fulfill the request"
+			print "Error code: ", e.code
+			venueId = None
+		except urllib2.URLError, e:
+			print "We failed to reach a server"
+			print "Reason: ", e.reason
+			venueId = None
+		else:
+			venues = json.load(res)['venues']
+			if len(venues) > 0:
+				venueIds = [venue['id'] for venue in venues]
+			else:
+				venueIds = None
+		if venueIds is not None:
+			urls = [(s_geek_url + '/events?venue.id=' + str(venueId) + '&client_id=' + sg_id + '&client_secret=' + sg_secret + '&taxonomies.name=concert') for venueId in venueIds]
+			final_events = []
+			final_total = 0
+			for url in urls:
+				try:
+					res = urllib2.urlopen(url)
+				except urllib2.HTTPError, e:
+					print "The server couldn't fulfill the request"
+					print "Error code: ", e.code
+					total = 0
+					events = "No events found. Please try again."
+				except urllib2.URLError, e:
+					print "We failed to reach a server"
+					print "Reason: ", e.reason
+					total = 0
+					events = "No events found. Please try again."
+				else:
+					events = json.load(res)
+					events = events['events']
+					total = len(events)					
+					for event in events:
+						final_events.append(event)
+						final_total += total
+			events = final_events
+			total = final_total
+		else:
+			events = []
+			total = 0
+	elif method == 'concert':
+		term = term.replace(' ', '+')
+		# Gets the concert Id given its name
+		if term is not None:
+			search = s_geek_url + '/events?q=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret
+			try:
+				res = urllib2.urlopen(search)
+			except urllib2.HTTPError, e:
+				print "The server couldn't fulfill the request"
+				print "Error code: ", e.code
+				total = 0
+				events = "No events found. Please try again."
+			except urllib2.URLError, e:
+				print "We failed to reach a server"
+				print "Reason: ", e.reason
+				total = 0
+				events = "No events found. Please try again."
+			else:
+				events = json.load(res)['events']
+				total = len(events)
+		else:
+			events = []
+			total = 0
 	elif method == 'artist':
 		term = term.replace(' ', '+')
 		# Gets the artists Id given their name
@@ -119,8 +215,13 @@ def get_events():
 			print "Reason: ", e.reason
 			artistId = None
 		else:
-			artistId = str(json.load(res)['performers'][0]['id'])
+			performers = json.load(res)['performers']
+			if len(performers) > 0:
+				artistId = str(performers[0]['id'])
+			else:
+				artistId = None
 		if artistId is not None:
+			print "Working"
 			search = s_geek_url + '/events?performers.id=' + artistId + '&client_id=' + sg_id + '&client_secret=' + sg_secret
 			try:
 				res = urllib2.urlopen(search)
@@ -137,12 +238,16 @@ def get_events():
 			else:
 				events = json.load(res)['events']
 				total = len(events)
+		else:
+			events = []
+			total = 0
 	else:
 		events = "Invalid parameters."
 		total = 0
 	# Generates the JSON for the information
 	return jsonify({'events': events, 'total': total})
 
+# Returns the user information if they're logged in
 @app.route('/get_user', methods=['GET'])
 def get_user():
 	if 'access' in session:
@@ -172,7 +277,7 @@ def signout():
 	session.pop('spot_href', None)
 	return redirect('/')
 
-# Generates the spotify playlist based on the selected concert
+# Generates the potential spotify playlist based on the selected concert
 @app.route('/api/gen_playlist', methods=['POST'])
 def gen_playlist():
 	artists = request.form.getlist('artists[]')
@@ -192,9 +297,12 @@ def gen_playlist():
 			print "Reason: ", e.reason
 		else:
 			item['name'] = artist
-			if len(res['artists']['items']) > 0:
+			if res['artists']['total'] > 0:
 				item['id'] = res['artists']['items'][0]['id']
-				item['image'] = res['artists']['items'][0]['images'][0]['url']
+				if len(res['artists']['items'][0]['images']) > 0:
+					item['image'] = res['artists']['items'][0]['images'][0]['url']
+				else:
+					item['image'] = 'static/logo.png'
 				track_url = '%sartists/%s/top-tracks?country=US'%(spotify_url, item['id'])
 				try:
 					res = json.load(urllib2.urlopen(track_url))['tracks']
@@ -235,8 +343,9 @@ def create_playlist():
 		print "We failed to reach a server"
 		print "Reason: ", e.reason
 	else:
-		href = json.load(res)['href'] + '/tracks'
-		print href
+		res = json.load(res)
+		href = res['href'] + '/tracks'
+		playlist_id = res['id']
 		try:
 			params = {'uris': tracks}
 			headers = {'Authorization': 'Bearer ' + session['access'], 'Content-Type': 'application/json'}
@@ -249,19 +358,18 @@ def create_playlist():
 			print "We failed to reach a server"
 			print "Reason: ", e.reason
 		else:
-			return jsonify({'success': 1})
+			return jsonify({'success': 1, 'id': playlist_id})
 	return jsonify({'success': -1})
 
-# Logs user into their spotify account
+# Logs user into their spotify account part 1
 @app.route('/spotify/auth', methods=['GET'])
 def spotify_auth():
 	scopes = "playlist-modify playlist-modify-public streaming"
 	cred = urllib.urlencode({'client_id': s_key, 'response_type': 'code', 'redirect_uri': redirect_1, 'scope': scopes})
 	url = "%s?%s"%(spot_auth, cred)
-
 	return redirect(url)
 
-# Logs user into their spotify account
+# Logs user into their spotify account part 2
 @app.route('/spotify/auth/handle', methods=['GET'])
 def spotify_auth_handler():
 	code = request.args.get('code', '')

@@ -17,7 +17,7 @@ var Navigation = React.createClass({
 	},
 	render: function() {
 		return (
-			<Navbar className='navigation'>
+			<Navbar className='navigation' fixedTop>
 				<Navbar.Header>
 					<Navbar.Brand>
 						<a href="/"> 

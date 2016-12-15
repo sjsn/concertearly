@@ -5,7 +5,8 @@ import $ from 'jquery';
 
 var DetailPage = React.createClass({
 	getInitialState: function() {
-		return {data: [], loading: true}
+		return {data: [], loading: true, 
+			created: <button onClick={this.handleCreateClick}>Create Playlist</button>};
 	},
 	componentDidMount: function() {
 		$.ajax({
@@ -19,7 +20,6 @@ var DetailPage = React.createClass({
 				this.handleDetails();
 			}.bind(this),
 			error: function(xhr, status, err) {
-
 				console.log(err);
 			}
 		});
@@ -48,8 +48,10 @@ var DetailPage = React.createClass({
 		this.setState({details: details});
 	},
 	handleCreateClick: function() {
-		// Create playlist with list of artists from this.state.artists
-		console.log(this.state.tracks);
+		// Create playlist with list of tracks from this.state.tracks
+		this.setState({created: 
+			<p className="loading play-created"><i className="fa fa-spinner"></i></p>
+		});
 		$.ajax({
 			url: '/api/create_playlist',
 			type: 'POST',
@@ -61,12 +63,16 @@ var DetailPage = React.createClass({
 				console.log(data);
 				if (data.success >= 0) {
 					console.log('success!');
-					
+					this.setState({created: 
+						<p className="play-created"><a href={"http://open.spotify.com/user/spotify/playlist/" + data.id}>Playlist Created <i className="fa fa-check-circle created"></i></a></p>
+					});
 				} else {
 					console.log('fail...');
-					
+					{this.setState({created: 
+						<p className="play-created failed">Failed to make playlist. <button onClick={this.handleCreateClick}>Retry</button></p>
+					})}
 				}
-			}.bind(this)
+			}.bind(this),
 			error: function(xhr, status, err) {
 				console.log(err);
 			}
@@ -81,15 +87,14 @@ var DetailPage = React.createClass({
 		} else {
 			artists.push(artist);
 		}
-		this.setState({artists: artists})
+		this.setState({artists: artists});
 		var tracks = [];
-		for (var i = 0; i < artists.length; i++) {
-			for (var j = 0; j < artists[i].tracks.length; j++) {
-				tracks.push(artists[i].tracks[j].uri);
+		for (var i = 0; i < this.state.artists.length; i++) {
+			for (var j = 0; j < this.state.artists[i].tracks.length; j++) {
+				tracks.push(this.state.artists[i].tracks[j].uri);
 			}
 		}
 		this.setState({tracks: tracks});
-		console.log(this.state.tracks);
 	},
 	render: function() {
 		if (!this.state.loading) {
@@ -99,7 +104,7 @@ var DetailPage = React.createClass({
 					<h2 className="sub-heading">{this.props.date} – {this.props.venue}</h2>
 					<div className="detail-top">
 						<h2>Featuring</h2>
-						<button onClick={this.handleCreateClick}>Create Playlist</button>
+						{this.state.created}
 					</div>
 					{this.state.details}
 				</div>
@@ -112,7 +117,7 @@ var DetailPage = React.createClass({
 			);
 		} else {
 			return (
-				<div>
+				<div className="details">
 					<p className='loading'><i className='fa fa-spinner'></i></p>
 				</div>
 			);

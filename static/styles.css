@@ -330,13 +330,16 @@ nav.navbar-top {
 }
 
 .results, .details {
+	margin-top: 60px;
 	padding-left: 5%;
 	padding-right: 5%;
 	padding-bottom: 1%;
 }
 
-.main-holder {
-	height: 100vh;
+.results {
+	height: 80vh;
+	position: relative;
+	overflow-y: hidden;
 }
 
 .result {
@@ -353,6 +356,8 @@ nav.navbar-top {
 .page-holder {
 	text-align: center;
 	width: 100%;
+	position: absolute;
+	bottom: 0px;
 }
 
 .pagination li.disabled a {
@@ -378,11 +383,11 @@ nav.navbar-top {
 	margin: 0px;
 }
 
-.play-btn {
+.play-btn, .pause-btn {
 	color: grey;
 }
 
-.play-btn:hover {
+.play-btn:hover, .pause-btn:hover {
 	cursor: pointer;
 }
 
@@ -406,7 +411,7 @@ img.artist-img {
 
 .footer {
 	text-align: center;
-	position: relative;
+	position: fixed;
 	bottom: 0px;
 	width: 100%;
 	background-color: #808080;
@@ -430,4 +435,27 @@ img.artist-img {
 .table-responsive {
 	height: 150px;
 	overflow-y: scroll;
+}
+
+.created {
+	color: green;
+}
+
+.play-created {
+	display: inline-block;
+	float: right;
+	margin-right: 100px;
+}
+
+.failed {
+	color: red;
+}
+
+.result-count {
+	margin-bottom: 0px;
+}
+
+.page-nums {
+	margin-bottom: 0px;
+	margin-top: 0px;
 }
