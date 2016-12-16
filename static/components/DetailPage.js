@@ -6,7 +6,7 @@ import $ from 'jquery';
 var DetailPage = React.createClass({
 	getInitialState: function() {
 		return {data: [], loading: true, 
-			created: <button onClick={this.handleCreateClick}>Create Playlist</button>};
+			created: <button onClick={this.handleCreateClick} className="add-btn">Create Playlist</button>};
 	},
 	componentDidMount: function() {
 		$.ajax({
@@ -63,8 +63,10 @@ var DetailPage = React.createClass({
 				console.log(data);
 				if (data.success >= 0) {
 					console.log('success!');
+					var uri = "https://embed.spotify.com/?uri=" + data.uri;
+					console.log(uri);
 					this.setState({created: 
-						<p className="play-created"><a href={"http://open.spotify.com/user/spotify/playlist/" + data.id} target="_blank">Playlist Created <i className="fa fa-check-circle created"></i></a></p>
+						<iframe src={uri} width="300" height="80" frameBorder="0" allowTransparency="true" className="play-created"></iframe>
 					});
 				} else {
 					console.log('fail...');
@@ -106,7 +108,8 @@ var DetailPage = React.createClass({
 					<h1 className="heading">{this.props.title}</h1>
 					<h2 className="sub-heading">{this.props.date} – {this.props.venue}</h2>
 					<div className="detail-top">
-						<h2>Featuring</h2>
+						<h2 className="detail-feat">Featuring</h2>
+						<a href={this.props.url} className="purchase-link" target="_blank">Puchase Tickets</a>
 						{this.state.created}
 					</div>
 					{this.state.details}

@@ -86,7 +86,7 @@ button:focus {
 	margin-right: 2%;
 	margin-bottom: 50px;
 	height: 450px;
-	overflow-y: hidden;
+	overflow-y: scroll;
 }
 
 .concert-title {
@@ -216,18 +216,26 @@ table {
 }
 
 .detail-top {
-	margin-bottom: 20px;
+	margin-bottom: 30px;
 }
 
-.detail-top h2 {
+.detail-feat {
 	display: inline-block;
 	margin-right: 50px;
 }
 
-.detail-top button {
+.add-btn {
 	float: right;
 	margin-right: 100px;
 	transform: translateY(100%);
+}
+
+.purchase-link {
+	color: #dd9425;
+}
+
+.purchase-link:hover {
+	color: #dd9425;
 }
 
 .heading, .sub-heading {
@@ -397,6 +405,10 @@ nav.navbar-top {
 	font-weight: bold;
 	margin-left: 10px;
 	margin-bottom: 0px;
+}
+
+.track-holder {
+	overflow-y: scroll;
 }
 
 .artist {

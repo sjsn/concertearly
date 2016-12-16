@@ -16,7 +16,9 @@ sg_id = seatgeek['id']
 sg_secret = seatgeek['secret']
 s_geek_url = 'https://api.seatgeek.com/2'
 
-redirect_1 = 'https://concertearly.appspot.com/spotify/auth/handle'
+aid = '&aid=12402'
+
+redirect_1 = 'http://localhost:8080/spotify/auth/handle'#'https://concertearly.appspot.com/spotify/auth/handle'
 
 # Renders main page
 @app.route('/', methods=['GET', 'POST'])
@@ -31,7 +33,7 @@ def get_events():
 	if method == 'zip':
 		# Gets the events Id given its zipcode
 		if term is not None:
-			search = s_geek_url + '/venues?postal_code=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret
+			search = s_geek_url + '/venues?postal_code=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret + aid
 		try:
 			res = urllib2.urlopen(search)
 		except urllib2.HTTPError, e:
@@ -50,7 +52,7 @@ def get_events():
 			else:
 				venueIds = None
 		if venueIds is not None:
-			urls = [(s_geek_url + '/events?venue.id=' + str(venueId) + '&client_id=' + sg_id + '&client_secret=' + sg_secret + '&taxonomies.name=concert') for venueId in venueIds]
+			urls = [(s_geek_url + '/events?venue.id=' + str(venueId) + '&client_id=' + sg_id + '&client_secret=' + sg_secret + '&taxonomies.name=concert' + aid) for venueId in venueIds]
 			final_events = []
 			final_total = 0
 			for url in urls:
@@ -81,7 +83,7 @@ def get_events():
 		term = term.replace(' ', '+')
 		# Gets the events Id given its zipcode
 		if term is not None:
-			search = s_geek_url + '/venues?city=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret
+			search = s_geek_url + '/venues?city=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret + aid
 		try:
 			res = urllib2.urlopen(search)
 		except urllib2.HTTPError, e:
@@ -99,7 +101,7 @@ def get_events():
 			else:
 				venueIds = None
 		if venueIds is not None:
-			urls = [(s_geek_url + '/events?venue.id=' + str(venueId) + '&client_id=' + sg_id + '&client_secret=' + sg_secret + '&taxonomies.name=concert') for venueId in venueIds]
+			urls = [(s_geek_url + '/events?venue.id=' + str(venueId) + '&client_id=' + sg_id + '&client_secret=' + sg_secret + '&taxonomies.name=concert' + aid) for venueId in venueIds]
 			final_events = []
 			final_total = 0
 			for url in urls:
@@ -130,7 +132,7 @@ def get_events():
 		term = term.replace(' ', '+')
 		# Gets the events Id given its name
 		if term is not None:
-			search = s_geek_url + '/venues?q=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret
+			search = s_geek_url + '/venues?q=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret + aid
 		try:
 			res = urllib2.urlopen(search)
 		except urllib2.HTTPError, e:
@@ -148,7 +150,7 @@ def get_events():
 			else:
 				venueIds = None
 		if venueIds is not None:
-			urls = [(s_geek_url + '/events?venue.id=' + str(venueId) + '&client_id=' + sg_id + '&client_secret=' + sg_secret + '&taxonomies.name=concert') for venueId in venueIds]
+			urls = [(s_geek_url + '/events?venue.id=' + str(venueId) + '&client_id=' + sg_id + '&client_secret=' + sg_secret + '&taxonomies.name=concert' + aid) for venueId in venueIds]
 			final_events = []
 			final_total = 0
 			for url in urls:
@@ -180,7 +182,7 @@ def get_events():
 		term = term.replace(' ', '+')
 		# Gets the concert Id given its name
 		if term is not None:
-			search = s_geek_url + '/events?q=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret
+			search = s_geek_url + '/events?q=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret + aid
 			try:
 				res = urllib2.urlopen(search)
 			except urllib2.HTTPError, e:
@@ -203,7 +205,7 @@ def get_events():
 		term = term.replace(' ', '+')
 		# Gets the artists Id given their name
 		if term is not None:
-			search = s_geek_url + '/performers?q=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret
+			search = s_geek_url + '/performers?q=' + term + '&client_id=' + sg_id + '&client_secret=' + sg_secret + aid
 		try:
 			res = urllib2.urlopen(search)
 		except urllib2.HTTPError, e:
@@ -221,7 +223,7 @@ def get_events():
 			else:
 				artistId = None
 		if artistId is not None:
-			search = s_geek_url + '/events?performers.id=' + artistId + '&client_id=' + sg_id + '&client_secret=' + sg_secret + '&taxonomies.name=concert'
+			search = s_geek_url + '/events?performers.id=' + artistId + '&client_id=' + sg_id + '&client_secret=' + sg_secret + '&taxonomies.name=concert' + aid
 			try:
 				res = urllib2.urlopen(search)
 			except urllib2.HTTPError, e:
@@ -345,7 +347,7 @@ def create_playlist():
 		else:
 			res = json.load(res)
 			href = res['href'] + '/tracks'
-			playlist_id = res['id']
+			playlist_uri = res['uri']
 			try:
 				params = {'uris': tracks}
 				headers = {'Authorization': 'Bearer ' + session['access'], 'Content-Type': 'application/json'}
@@ -358,7 +360,7 @@ def create_playlist():
 				print "We failed to reach a server"
 				print "Reason: ", e.reason
 			else:
-				return jsonify({'success': 1, 'id': playlist_id})
+				return jsonify({'success': 1, 'uri': playlist_uri})
 		return jsonify({'success': -1})
 	else:
 		return jsonify({'success': -1})

@@ -16,12 +16,12 @@ var HomeContent = React.createClass({
 	handleSelect: function(eventKey) {
 		this.setState({activePage: eventKey, searchResults: this.changePage(eventKey)});
 	},
-	handleClick: function(artists, venue, date, title) {
-		this.props.onClick(artists, venue, date, title);
+	handleClick: function(artists, venue, date, title, url) {
+		this.props.onClick(artists, venue, date, title, url);
 	},
 	changePage: function(key) {
 		if (this.props.length) {
-			var items = this.props.items.slice((key - 1) * 6, key * 6);
+			var items = this.props.items.slice((key - 1) * 4, key * 4);
 			this.setState({total: items.length});
 			var searchResults = items.map(function(item, index) {
 				var names = [];
@@ -42,6 +42,7 @@ var HomeContent = React.createClass({
 						artists={artists}
 						names={names}
 						date={date}
+						url={item.url + '&aid=12402'}
 						key={index}
 						onClick={this.handleClick}
 					/>
@@ -70,7 +71,7 @@ var HomeContent = React.createClass({
 						last
 						ellipsis
 						boundaryLinks
-						items={Math.ceil(this.props.items.length / 6)}
+						items={Math.ceil(this.props.items.length / 4)}
 						maxButtons={6}
 						activePage={this.state.activePage}
 						onSelect={this.handleSelect}
